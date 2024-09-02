@@ -125,7 +125,7 @@
                 <input type="hidden" name="email-entered">
                 <p id="email-message"></p>
                 <input type="submit" value="Submit" id="submit-button">
-                <button id="cancel-button">Cancel</button>
+                <button id="cancel-button1">Cancel</button>
             </form>
         </div>
 
@@ -143,7 +143,7 @@
                 <p id="resend-otp">You can resend the OTP in <span id="timer">60</span> seconds.</p>
                 <a href="#" id="resend-link">Resend OTP</a>
                 <input type="submit" value="Submit">
-                <button id="cancel-button">Cancel</button>
+                <button id="cancel-button2">Cancel</button>
             </form>
         </div>
 
@@ -302,7 +302,18 @@
                 });
             });
 
-            $('#cancel-button').on('click', function(event) {
+            $('#cancel-button1').on('click', function(event) {
+                event.preventDefault(); // Prevent the default action of the button
+                
+                var userConfirmed = confirm('Are you sure you want to cancel? You will be redirected to the login page.');
+
+                if (userConfirmed) {
+                    resetOtpState();
+                    window.location.href = 'login.php';
+                }
+            });
+
+            $('#cancel-button2').on('click', function(event) {
                 event.preventDefault(); // Prevent the default action of the button
                 
                 var userConfirmed = confirm('Are you sure you want to cancel? You will be redirected to the login page.');

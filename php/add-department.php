@@ -12,6 +12,7 @@
                 window.location.href = currentUrl + separator + 'act=CH-DEPARTMENT';
             </script>";
         }else{
+            $department= ucfirst($_POST['department']);
             $sql_add_department = "INSERT INTO departments (department_name) VALUES ('$department')";
             if($conn->query($sql_add_department) === TRUE) {
                 $department_id = $conn->insert_id;

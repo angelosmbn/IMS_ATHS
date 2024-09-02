@@ -1,6 +1,6 @@
 <?php 
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add-unit'])) {
-        $unit = $_POST['unit'];
+        $unit = trim($_POST['unit']);
 
         $sql_check_duplicate = "SELECT * FROM items_unit WHERE unit_name = '$cunit'";
         $result = $conn->query($sql_check_duplicate);

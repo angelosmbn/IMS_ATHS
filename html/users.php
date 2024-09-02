@@ -21,7 +21,7 @@
         $userId = $_POST['user_id'];
         $accessLevel = $_POST['access_level'];
         $unique_departments = array_unique($_POST['department']); // Remove duplicates from the array
-$unique_departments_string = implode(', ', $unique_departments); // Implode unique values back into a string
+        $unique_departments_string = implode(', ', $unique_departments); // Implode unique values back into a string
 
 
         if ($accessLevel == "coordinator" || $accessLevel == "finance officer") {

@@ -17,10 +17,10 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit-item'])) {
         $item_id = $_POST['edit-item'];
-        $new_item_name = $_POST['item-name'];
+        $new_item_name = ucwords($_POST['item-name']);
         $new_item_category = $_POST['item-category'];
-        $new_item_brand = $_POST['item-brand'];
-        $new_item_description = $_POST['item-description'];
+        $new_item_brand = ucwords($_POST['item-brand']);
+        $new_item_description = ucfirst($_POST['item-description']);
         $new_item_stocks = $_POST['item-stocks'];
         $new_item_unit = $_POST['item-unit'];
         $new_item_price = $_POST['item-price'];

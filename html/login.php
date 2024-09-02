@@ -80,12 +80,13 @@
     // Check if the user is trying to signup
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup_form']) && $_POST['signup_form'] == 1) {
         // Extract user input
-        $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
-        $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
-        $middle_name = mysqli_real_escape_string($conn, $_POST['middle_name']);
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $contact = mysqli_real_escape_string($conn, $_POST['contact']);
-        $acc_username = mysqli_real_escape_string($conn, $_POST['acc_username']);
+        $first_name = ucwords(trim(mysqli_real_escape_string($conn, $_POST['first_name'])));
+        $last_name = ucwords(trim(mysqli_real_escape_string($conn, $_POST['last_name'])));
+        $middle_name = ucwords(trim(mysqli_real_escape_string($conn, $_POST['middle_name'])));
+        $email = trim(mysqli_real_escape_string($conn, $_POST['email']));
+        $contact = trim(mysqli_real_escape_string($conn, $_POST['contact']));
+        $acc_username = trim(mysqli_real_escape_string($conn, $_POST['acc_username']));
+
         $password = mysqli_real_escape_string($conn, $_POST['password-signup']);
         $confirmPassword = mysqli_real_escape_string($conn, $_POST['confirmPassword']);
         $creation_date = date("Y-m-d H:i:s");
@@ -191,8 +192,8 @@
                         <input type="text" name="acc_username" placeholder="Username"  value="<?php echo !empty($acc_username) ? $acc_username : "" ?>" required>
                         
                     
-                        <input type="text" name="email" placeholder="Email"  value="<?php echo !empty($email) ? $email : "" ?>" required>
-                        <input type="text" name="contact" placeholder="Contact" value="<?php echo !empty($contact) ? $contact : "" ?>" required>
+                        <input type="email" name="email" placeholder="Email"  value="<?php echo !empty($email) ? $email : "" ?>" required>
+                        <input type="text" id="contact" name="contact" placeholder="e.g., 0912-345-6789" maxlength="13" pattern="09\d{2}-\d{3}-\d{4}" value="<?php echo !empty($contact) ? $contact : "" ?>" required oninput="formatPhoneNumber(this)">
                     
                         <input type="password" name="password-signup"  autocomplete="on" placeholder="Password" required >
                         <input type="password" name="confirmPassword"  autocomplete="on" placeholder="Confirm Password" required>
@@ -357,6 +358,19 @@
                 });
             });
         });
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+            // Format 0912-345-6789
+            if (value.length > 3) {
+                value = value.replace(/(\d{4})(\d{0,3})/, '$1-$2');
+            }
+            if (value.length > 7) {
+                value = value.replace(/(\d{4})-(\d{3})(\d{0,4})/, '$1-$2-$3');
+            }
+
+            input.value = value;
+        }
     </script>
 
 

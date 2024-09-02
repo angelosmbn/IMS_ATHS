@@ -14,7 +14,7 @@
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'angelosimbulan16@gmail.com';
-        $mail->Password = 'qglw gkua lgxc szxw'; //password not written for security purposes
+        $mail->Password = ''; //password not written for security purposes
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
     
@@ -134,11 +134,11 @@
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'angelosimbulan16@gmail.com';
-        $mail->Password = 'qglw gkua lgxc szxw'; // Replace with your actual password
+        $mail->Password = ''; // Replace with your actual password
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
     
-        $mail->setFrom('no-reply@aths.edu.ph', 'ATHS INVENTORY SYSTEM');
+        $mail->setFrom('no-reply@aths.com', 'ATHS INVENTORY SYSTEM');
         $mail->addAddress($recipientEmail);
     
         $mail->isHTML(true);
@@ -182,7 +182,8 @@
                 </div>
             </body>
         </html>";
-    
+        // Set reply-to address (where recipients will respond)
+        $mail->addReplyTo('inventory-support@aths.edu.ph', 'ATHS Inventory System Support'); // Replace with desired reply-to address
         $mail->send();
     }
     

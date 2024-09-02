@@ -1,6 +1,6 @@
 <?php 
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add-category'])) {
-        $category = $_POST['category'];
+        $category = trim($_POST['category']);
 
         $sql_check_duplicate = "SELECT * FROM items_category WHERE category_name = '$category'";
         $result = $conn->query($sql_check_duplicate);
@@ -8,6 +8,7 @@
             echo "<script>alert('Category already exists!')</script>";
             echo "<script>window.location.href = 'inventory.php?act=CH-CATEGORY';</script>";
         }else{
+
             $sql_add_category = "INSERT INTO items_category (category_name) VALUES ('$category')";
             if($conn->query($sql_add_category) === TRUE) {
                 echo "<script>alert('Category added successfully!')</script>";

@@ -1,9 +1,9 @@
 <?php 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add-item'])) {
-        $item_name = $_POST['item-name'];
+        $item_name = ucwords($_POST['item-name']);
         $item_category = $_POST['item-category'];
-        $item_brand = $_POST['item-brand'];
-        $item_description = $_POST['item-description'];
+        $item_brand = ucwords($_POST['item-brand']);
+        $item_description = ucfirst($_POST['item-description']);
         $item_stocks = $_POST['item-stocks'];
         $item_unit = $_POST['item-unit'];
         $item_price = $_POST['item-price'];
