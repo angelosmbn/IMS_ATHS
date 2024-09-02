@@ -1,0 +1,175 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #deeefa;
+}
+
+.main {
+    max-width: 800px;
+    max-height: 600px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    border-radius: 10px;
+    background-color: #deeefa;
+    box-shadow:
+    10px 10px 10px #ccdbe6,
+    -10px -10px 10px #f0f8ff;
+}
+.form-container {
+    background-color: #fff;
+    min-width: 500px;
+    height: 600px;
+    top: 0;
+    left: 0;
+    transition: all 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, .5);
+    border-start-start-radius: 10px;
+    border-end-start-radius: 10px;
+    background-color: #5baff5;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+input {
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+    background-color: #cce2f0;
+    border-radius: 10px;
+    border: none;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, .5);
+}
+select {
+    margin: 10px;
+    padding: 10px;
+    width: 220px;
+    background-color: #cce2f0;
+    border-radius: 10px;
+    border: none;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, .5);
+}
+button {
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .5);
+    background-color: #cce2f0;
+    
+}
+
+.welcome-container {
+    background-color: #fff;
+    min-width: 300px;
+    height: 600px;
+    top: 0;
+    left: 0;
+    transition: all 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+    border-start-end-radius: 10px;
+    border-end-end-radius: 10px;
+    overflow: hidden;
+    background-color: #48a0e8;
+}
+button {
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #aed7f0;
+}
+h2 {
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+}
+#a-container {
+
+    transition: all 1.25s ease-in-out;
+}
+#b-container {
+    
+    transition: all 1.25s ease-in-out;
+    
+}
+.signup-form{
+    display: none;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        
+        opacity: 1;
+    }
+}
+.fadeIn {
+    animation-name: fadein;
+    animation-duration: .7s;
+}
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.fadeOut {
+    animation-name: fadeout;
+    animation-duration: .7s;
+}
+@keyframes widenB {
+    50% {
+        right: 500px;
+        min-width: 00px;
+    }
+    100% {
+        min-width: 1000px;
+    }
+}
+.widen-b {
+    animation-name: widenB;
+    animation-duration: 2s;
+}
+.circle1, .circle2 {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background-color: #48a0e8;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, .5);
+    bottom: 80%;
+    left: 0%;
+    transition: all 1.25s ease-in-out;
+}
+.circle2 {
+    top: 80%;
+    left: 10%;
+    width: 350px;
+    height: 350px;
+}

@@ -1,0 +1,102 @@
+.floating-viewItem-container {
+    display: none;
+    position: fixed;
+    top: 53%;
+    left: 50%;
+    background-color: rgb(247, 247, 247);
+    padding: 0;
+    width: 80%;
+    height: 80%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: auto;
+    transform: translate(-46%, -50%);
+    border-radius: 10px;
+}
+
+.view-item, .item-details {
+    margin: 30px;
+    margin-top: -10px;
+}
+
+.item-details table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.item-details table span {
+    font-weight: bold;
+}
+
+.item-details table td {
+    font-size: 20px;
+    text-align: center;
+    padding: 0;
+    border: none;
+    width: 25%;
+
+}
+
+
+
+
+.view-item {
+    margin: 30px;
+    max-height: 65vh;
+    overflow: auto;
+}
+
+.sticky-row {
+    position: sticky;
+    top: -1px;
+    background-color: #ffffff;
+    color: #888;
+}
+
+.sticky-row-2 {
+    position: sticky;
+    top: 41px;
+    background-color: #ffffff;
+    color: #888;
+}
+
+.view-item table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+
+.view-item table th {
+    border: 1px solid #ccc;
+    text-align: center;
+    background-color: #d0d0d0;
+    color: #6e6e6e;
+    height: 40px;
+}
+
+
+.view-item table td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px;
+}
+
+.view-item label {
+    font-size: 15px;
+    color: rgb(128, 130, 134);
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.view-item table tr:nth-child(even) {
+    background-color: #e2e2e2;
+}
+
+
+
+.floating-viewItem-container .form-title {
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

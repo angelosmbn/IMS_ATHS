@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: antiquewhite;
+}
+
+.navigation-container-large {
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    position: fixed;
+    z-index: 1001;
+}
+
+.navigation-container-large ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.navigation-container-large li {
+    padding: 10px 0;
+    font-size: 20px;
+}
+
+.navigation-container-large .logo {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.navigation-container-large .logo img{
+    position: absolute;
+    left: 15px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.navigation-container-large .logo .organization-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 85px;
+    color: rgb(32, 32, 255);
+}
+
+.navigation-container-large .logo .organization-system {
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+}
+
+.navigation-container-large .logo .arrow a i{
+    position: absolute;
+    font-size: 20px;
+    color: rgb(212, 212, 212);
+}
+
+.navigation-container-large .logo .arrow a{
+    padding: 0;
+    margin: 0px;
+    margin-left: 15px;
+}
+
+.main-menu {
+    
+}
+
+.navigation-container-large .main-menu .label{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    font-size: 15px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    padding-left: 10px;
+}
+
+span {
+    padding-left: 20px;
+}
+
+.navigation-container-large .main-menu li{
+    padding-left: 20px;
+    font-size: 20px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.navigation-container-large .main-menu li:hover {
+    background-color: rgb(194, 194, 194);
+}
+
+.collapsed {
+    width: 40px;
+    span, .organization-name, .organization-system, .label {
+        display: none;
+    }
+    .logo {
+        width: 90px;
+        border: 1px solid black;
+    }
+    .navigation-container-large .main-menu li{
+        padding-left: 0;
+        border: 1px solid red;
+    }
+    a {
+        border: 1px solid green;
+        padding: 0;
+    }
+}

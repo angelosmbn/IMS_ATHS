@@ -1,0 +1,297 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.inbox-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #e3e3e3;
+    padding: 0;
+    padding-top: 89px;
+    border-radius: 20px;
+}
+
+.inbox-container .settings-container {
+    margin: auto;
+    width: 95%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+}
+
+.settings-container select, .settings-container button {
+    width: 200px;
+    height: 25px;
+    margin: 0 5px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.settings-container button {
+    cursor: pointer;
+    z-index: 1000;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 18px;
+    width: 150px;
+    height: 35px;
+}
+
+.inbox-table {
+    width: 95%;
+    max-height: 83vh;
+    margin-top: 10px;
+    overflow: auto;
+    margin: auto;
+    margin-bottom: 140px;
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.inbox-table table {
+    width: 100%;
+    max-height: 500px;
+    overflow: auto;
+    border-collapse: collapse;
+    overflow: auto;
+    padding: 10px;
+}
+
+.inbox-table th, td {
+    padding: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    border: 1px solid #c2c2c2;
+    font-family: Arial, sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'roboto', sans-serif;
+}
+
+.inbox-table th {
+    background-color: #d0d0d0;
+}
+
+
+.inbox-table tr:nth-child(odd) td {
+    background-color: #e6e6e6;
+}
+.inbox-table tr:nth-child(even) td {
+    background-color: #ffffff;
+}
+
+.sticky-row {
+    position: sticky;
+    top: -1px;
+    background-color: #ffffff;
+    color: #888;
+}
+
+.floating-editRequest-container {
+    display: none;
+    position: fixed;
+    top: 53%;
+    left: 50%;
+    background-color: rgb(247, 247, 247);
+    padding: 0;
+    width: 80%;
+    height: 80%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: auto;
+    transform: translate(-46%, -50%);
+    border-radius: 10px;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.request-details {
+    margin: 30px;
+    margin-top: -10px;
+}
+
+.request-details table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.request-details table th {
+    border: 1px solid #ccc;
+    text-align: center;
+    background-color: #d0d0d0;
+    color: #6e6e6e;
+    height: 40px;
+}
+
+.request-details-tr td{
+    border: none;
+}
+
+#request-name-td {
+    text-align: left;
+}
+
+#request-date-td {
+    text-align: right;
+}
+
+.request-inputs tr td{
+    border: none;
+}
+
+.request-inputs {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+textarea {
+    max-width: 350px;
+    max-height: 100px;
+    resize: none;
+    font-size: 15px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #ccc;
+}
+
+
+.add-minus-btn {
+    border: none;
+}
+
+.add-minus-btn td {
+    border: none;
+}
+
+.floating-editUser-container form {
+    width: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+#save-button {
+    width: 15%;
+    height: 35px;
+    font-size: 20px;
+    cursor: pointer;
+
+} 
+
+#mark-button {
+    background-color: #c2b500;
+    margin-right: 20px;
+}
+
+#return-button, #mark-button {
+    width: 15%;
+    height: 35px;
+}
+
+#approve-button:hover, #release-button:hover, #receive-button:hover, #return-button:hover {
+    background-color: #3c9140;
+    scale: 1.1;
+}
+#mark-button:hover {
+    background-color: #9e9400;
+    scale: 1.1;
+}
+
+#reject-button {
+    background-color: #b6514c;
+}
+
+#reject-button:hover {
+    background-color: #91403c;
+    scale: 1.1;
+}
+
+.submit-buttons {
+    width: 100%;
+    text-align: center;
+    
+}
+
+
+.actions button {
+    cursor: pointer;
+    background-color: transparent;
+    width: auto;
+    height: auto;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 2px;
+    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+}
+
+.actions {
+    width: 140px;
+    padding: 0;
+}
+
+.actions .btn1 {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn1:hover {
+    background-color: #3c9140;
+    scale: 1.1;
+}
+
+
+.floating-editRequest-container .form-title {
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#return-indicator {
+    width: 5px;
+}
+
+
+/* Webkit (Safari/Chrome) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+html {
+    scroll-behavior: smooth;
+}
+

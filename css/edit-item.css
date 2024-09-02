@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.floating-editItem-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: rgb(247, 247, 247);
+    padding: 0;
+    width: 40%;
+    height: 45%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: auto;
+    transform: translate(-46%, -50%);
+    border-radius: 10px;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px 13px 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.edit-item-form {
+    padding: 50px;
+    padding-bottom: 0px;
+    padding-left: 80px;
+    padding-right: 30px;
+    padding-top: 0;
+}
+
+.edit-item-form table {
+    width: 100%;
+    height: 100%;
+}
+
+
+.edit-item-form table td {
+    font-size: 20px;
+    text-align: left;
+    padding: 0;
+    width: 33%;
+    border: none;
+}
+
+.edit-item-form input, .edit-item-form select {
+    width: 80%;
+    height: 25px;
+}
+.edit-item-form select {
+    height: 30px;
+    width: 83%;
+}
+
+.edit-item-form .form-button{
+    width: 94%;
+    text-align: center;
+    padding-bottom: 20px;
+    font-weight: bold;
+}
+
+.edit-item-form .form-button button {
+    margin-top: 40px;
+    width: 80px;
+    height: 40px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.edit-item-form label {
+    font-size: 15px;
+    color: rgb(128, 130, 134);
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.floating-editItem-container .form-title {
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

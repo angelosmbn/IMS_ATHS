@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(118, 118, 118);
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.navigation-bar-horizontal-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    height: 90px;
+    z-index: 999;
+    width: calc(100% - 90px);
+
+}
+.navigation-bar-horizontal-container .testing {
+    font-size: 40px;
+    color: black;
+}
+.navigation-bar-horizontal {
+    
+}
+
+
+
+.navigation-bar-horizontal .circlee {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgb(216, 216, 216);
+    margin-right: 20px;
+    font-size: 30px;
+}
+
+.navigation-bar-horizontal .notificatioen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    font-size: 25px;
+}

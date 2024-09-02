@@ -1,0 +1,179 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.floating-addUnit-container {
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: rgb(247, 247, 247);
+    padding: 0;
+    width: 40%;
+    height: 65%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: auto;
+    transform: translate(-46%, -50%);
+    border-radius: 10px;
+} 
+
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    height: 20px;
+    line-height: 27px;
+}
+
+.bar {
+    width: 100%;
+    height: 40px;
+    user-select: none;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    line-height: 40px;
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #e4e4e4;
+    margin-bottom: 20px;
+}
+
+.add-unit-from {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.add-unit-from label {
+    font-size: 20px;
+    text-align: left;
+    padding: 0;
+    border: none;
+    width: 100%;
+}
+.add-unit-from input {
+    width: 99%;
+    height: 25px;
+}
+
+.add-unit-from button {
+    width: 20%;
+    height: 35px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.unit-table {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 30px;
+}
+
+.unit-table table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+
+}
+
+.unit-table table th {
+    height: 40px;
+    font-size: 20px;
+    padding: 0;
+    border: 1px solid black;
+    background-color: #bdbdbd;
+}
+
+.unit-table table td {
+    font-size: 20px;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+
+
+
+.floating-addUnit-container .form-title, .floating-editUnit-container .form-title{
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.edit-unit-btn {
+    width: 45px;
+    height: 35px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+
+
+.floating-editUnit-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: rgb(247, 247, 247);
+    padding: 0;
+    width: 40%;
+    height: 20%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: auto;
+    transform: translate(-46%, -50%);
+    border-radius: 10px;
+}
+
+.edit-unit-from {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.edit-unit-from label {
+    font-size: 20px;
+    text-align: left;
+    padding: 0;
+    border: none;
+    width: 100%;
+}
+.edit-unit-from input {
+    width: 99%;
+    height: 25px;
+}
+
+.edit-unit-from button {
+    width: 20%;
+    height: 30px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 20px;
+}

@@ -1,0 +1,175 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.floating-settings-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: rgb(247, 247, 247);
+    padding: 0;
+    width: 40%;
+    height: 56%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1010;
+    overflow: auto;
+    transform: translate(-46%, -50%);
+    border-radius: 10px;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px 13px 10px;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.bar {
+    width: 100%;
+    height: 40px;
+    user-select: none;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    line-height: 40px;
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.settings-choices {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    user-select: none;
+}
+
+.settings-choice {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 17px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    cursor: pointer;
+}
+
+.settings-choice:hover {
+    background-color: rgb(128, 128, 128);
+    color: white;
+}
+
+.settings-content {
+    user-select: none;
+}
+
+.settings-content-item {
+    display: none;
+    padding: 20px;
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.settings-content-item form {
+    font-size: 15px;
+    margin-top: 25px;
+}
+
+.settings-content-item button {
+    width: 200px;
+    height: 25px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.settings-content-item input {
+    width: 100%;
+    height: 22px;
+    
+}
+
+.settings-content-item table{
+    width: 55%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.settings-content-item table tr td {
+    padding: 10px;
+    text-align: left;
+    border: none;
+    width: 250px;
+}
+
+#settings-button {
+    text-align: center;
+}
+
+.instructions {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+    font-size: 15px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+}
+
+#school-year1, #school-year2{
+    width: 50px;
+}
+
+#school_year_message, #username-message, #email-message, #password-message {
+    text-align: center;
+}
+
+
+
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1100; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black with opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.modal-content button {
+    margin: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#confirmYes {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#confirmNo {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
