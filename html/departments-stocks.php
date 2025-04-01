@@ -58,7 +58,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/departments-stocks.css">
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -67,7 +66,7 @@
 <body>
     <div class="departments-stocks-container" id="departments-stocks-container">
         <div class="settings-container">
-            <input type="text" name="search" id="search">
+            <input type="text" name="search" id="search" maxlength="255">
             <select name="department" id="department" onchange="departmentChanged()">
                 <option value="">Select Department</option>
                 <?php 

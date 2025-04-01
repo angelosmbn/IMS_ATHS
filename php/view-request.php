@@ -8,6 +8,7 @@
 
     $sql_get_request = "SELECT * FROM requests r
                         JOIN users u ON r.requestor_id = u.user_id
+                        JOIN departments d ON r.charged_department = d.department_id
                         WHERE r.request_id = " . $requestId;
     $result_get_request = $conn->query($sql_get_request);
     $row_get_request = $result_get_request->fetch_assoc();
@@ -25,10 +26,13 @@
 
 <table>
     <tr class="request-details-tr">
-        <td colspan="3" id="request-name-td">
+        <td colspan="4" id="request-name-td">
             <b>Name:</b> <?php echo $requestor_name?>
         </td>
-        <td colspan="4" id="request-date-td">
+        <td colspan="2" id="request-name-td">
+            <b>Department:</b> <?php echo $row_get_request['department_name']?>
+        </td>
+        <td id="request-date-td">
             <b>Request Date:</b> <?php echo $request_date?>
         </td>
     </tr>
@@ -58,7 +62,7 @@
             $description = $row_get_requested_items['request_description'];
             if ($row_get_requested_items['borrowable'] == 'yes' && !$borrowableDisplayed) {
                 echo '<tr>';
-                echo '<td colspan="7"><b>Borrowable Items</b></td>';
+                echo '<td colspan="7" style="background-color: #d0d0d0; color: #888;"><b>Borrowable Items</b></td>';
                 echo '</tr>';
                 $borrowableDisplayed = true; // Set to true once borrowable items are displayed
             }
@@ -93,9 +97,15 @@
             echo '<td>' . $row_get_requested_items['request_quantity'] . '</td>';
             echo '<td>' . $row_get_requested_items['item_price'] . '</td>';
             echo '<td>' . $row_get_requested_items['needed_date'] . '</td>';
-            echo '<td>' . $row_get_requested_items['department_name'] . '</td>';
+            if ($row_get_requested_items['is_rejected'] == 'yes') {
+                echo '<td>REJECTED<span style="display:inline-block; width:10px; height:10px; background-color:red; border-radius:50%;"></span></td>';
+            } else {
+                echo '<td>' . $row_get_requested_items['department_name'] . '</td>';
+                $grand_total += $row_get_requested_items['request_quantity'] * $row_get_requested_items['item_price'];
+            }
+            //echo '<td>' . $row_get_requested_items['department_name'] . '</td>';
             echo '</tr>';
-            $grand_total += $row_get_requested_items['request_quantity'] * $row_get_requested_items['item_price'];
+            
         }
     ?>
     <tr>

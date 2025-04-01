@@ -17,7 +17,7 @@
 <h2 class="form-title">Edit Department</h2>
 <form class="edit-category-from" action="" method="POST">
     <label for="department">Department: <?php echo $department_name ?></label>
-    <input type="text" name="new-department" id="new-department" value="<?php echo $department_name ?>" required>
+    <input type="text" name="new-department" id="new-department" value="<?php echo $department_name ?>" maxlength="255" required>
     <input type="hidden" name="edit-department" value="<?php echo $department_id ?>">
     <button type="submit">Save Changes</button>
 </form>

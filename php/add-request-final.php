@@ -33,7 +33,7 @@
     <th>Quantity</th>
     <th>Approximate Price</th>
     <th>Date Needed</th>
-    <th>Charge Account</th>
+    <th>Charged Account</th>
     <input type="hidden" name="selected_department" value="<?php echo $departmentId; ?>">
     <input type="hidden" name="date_needed" value="<?php echo $date_needed; ?>">
     <input type="hidden" name="purpose" value="<?php echo $purpose; ?>">

@@ -16,11 +16,10 @@
             // Get the user ID from the session
             $requestor_id = $_SESSION['user_id'];
             $requestor_level = $_SESSION['access_level'];
-            $coordinator_id = 1; // Temporary coordinator ID use sql to get it.
-            $finance_id = 1; // Temporary finance ID use sql to get it.
+            $coordinator_id = 0; // Temporary coordinator ID use sql to get it.
+            $finance_id = 0; // Temporary finance ID use sql to get it.
             $school_year = $_SESSION['school_year']; // Temporary school year use sql to get it. get the latest school year
             $requested_date = date('Y-m-d H:i:s'); // Get the current date and time
-            //$request_status = "coordinator approval"; // Set the request status to pending
 
             // Get the coordinator ID
             $sql_get_coordinator_id = "SELECT * FROM users WHERE (access_level = 'coordinator' OR access_level = 'finance officer') AND FIND_IN_SET('$selected_department', handled_department)";
@@ -57,23 +56,61 @@
             //6 finance
             //3 coordinator
 
-            if ($requestor_id === $coordinator_id || $coordinator_id === $finance_id) {
+            if ($coordinator_id === $finance_id) {
                 $request_status = "finance approval";
-            } else if ($coordinator_id !== null) {
+            } elseif ($coordinator_id !== null) {
                 $request_status = "coordinator approval";
             } else {
                 $request_status = "finance approval";
             }
 
+            // begin transaction
+            $conn->begin_transaction();
+            
+            $sql_check_requests = "SELECT * FROM requests WHERE charged_department = '$selected_department' AND (request_status = 'coordinator approval' OR request_status = 'finance approval')";
+            $result = $conn->query($sql_check_requests);
+            if ($result->num_rows > 0) {
+                // Group the requests by department
+                while ($row = $result->fetch_assoc()) {
+                    if ($row['request_group_id'] != null) {
+                        $request_group_id = $row['request_group_id'];
+                        break;
+                    } else {
+                        $sql_get_max_request_group_id = "SELECT MAX(request_group_id) AS max_request_group_id FROM requests";
+                        $result = $conn->query($sql_get_max_request_group_id);
 
+                        if ($result) {
+                            $row = $result->fetch_assoc();
+                            $request_group_id = isset($row['max_request_group_id']) ? $row['max_request_group_id'] + 1 : 1; // Initialize to 1 if NULL
 
+                            $sql_update_request_group_id = "UPDATE requests SET request_group_id = '$request_group_id' WHERE charged_department = '$selected_department' AND (request_status = 'coordinator approval' OR request_status = 'finance approval')";
+                            echo "<script>alert('group id: " . $request_group_id . "');</script>";
+                            if (!$conn->query($sql_update_request_group_id)) {
+                                $conn->rollback();
+                                echo "<script>alert('An error occurred while updating the request group ID.');</script>";
+                                return;
+                            } else {
+                                break;
+                            }
+                        } else {
+                            echo "<script>alert('An error occurred while retrieving the max request group ID.');</script>";
+                            return;
+                        }
+                    }
+                }
+                $sql_insert_request = "INSERT INTO requests (requestor_id, coordinator_id, finance_id, school_year, requested_date, request_status, needed_date, request_description, charged_department, request_group_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql_insert_request);
+                $stmt->bind_param("iiisssssii", $requestor_id, $coordinator_id, $finance_id, $school_year, $requested_date, $request_status, $date_needed, $purpose, $selected_department, $request_group_id);
+                $stmt->execute();
+            } else {
                 $sql_insert_request = "INSERT INTO requests (requestor_id, coordinator_id, finance_id, school_year, requested_date, request_status, needed_date, request_description, charged_department) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql_insert_request);
                 $stmt->bind_param("iiisssssi", $requestor_id, $coordinator_id, $finance_id, $school_year, $requested_date, $request_status, $date_needed, $purpose, $selected_department);
-                //echo "<script>alert('Coordinator ID: $coordinator_id');</script>";
+                $stmt->execute();
+            }
 
 
-            $stmt->execute();
+            
 
             if($conn->affected_rows > 0) {
                 // Get the last inserted request ID
@@ -85,24 +122,33 @@
                     $itemId = $itemIds[$i];
                     $quantity = $quantities[$i];
                     $department = ($departments[$i] != 0) ? $selected_department : $departments[$i];
+                    
+                    $sql_check_item = "SELECT * FROM items WHERE item_id = '$itemId'";
+                    $result = $conn->query($sql_check_item);
+                    $row = $result->fetch_assoc();
+
+                    $borrowable = $row['borrowable'] == 'yes' ? 'no' : 'na';
+
 
                     //sql
-                    $sql_insert_request_items = "INSERT INTO requested_items (request_id_fk, item_id_fk, request_quantity, requesting_department_id) VALUES 
-                    ('$request_id', '$itemId', '$quantity', '$department')";
+                    $sql_insert_request_items = "INSERT INTO requested_items (request_id_fk, item_id_fk, request_quantity, requesting_department_id, return_status) VALUES 
+                    ('$request_id', '$itemId', '$quantity', '$department', '$borrowable')";
                     $conn->query($sql_insert_request_items);
-                    //echo "<script>alert('$itemId - $quantity - $department');</script>";
                 }
                 if($conn->affected_rows > 0) {
+                    $conn->commit();
                     echo "<script>alert('Request submitted successfully.');</script>";
                     echo "<script>window.location.href = 'inventory.php';</script>";
                 } else {
+                    $conn->rollback();
                     echo "<script>alert('Request was not able to be inserted to request table.');</script>";
                 } 
             } else {
-                echo "script>alert('Request was not able to be inserted to request table.');</script>";
+                $conn->rollback();
+                echo "<script>alert('Request was not able to be inserted to request table.');</script>";
             }
         } else {
-            echo "script>alert('Please fill out all required fields.');</script>";
+            echo "<script>alert('Please fill out all required fields.');</script>";
         }
     }
     
@@ -121,8 +167,6 @@
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
     crossorigin="anonymous"></script>
-    
-    <title>Document</title>
 </head>
 <body>
     <div class="floating-addRequest-container" id="floating-addRequest-container">
@@ -154,7 +198,7 @@
                 <button class="next-button1" id="next-button1" name="next-button1">Next</button>
                 <button class="back-button" id="back-button">Back</button>
                 <button class="back-button1" id="back-button1">Back</button>
-                <input type="text" name="search" id="search" placeholder="Search here">
+                <input type="text" name="search" id="search" placeholder="Search here" maxlength="255">
                 <button class="submit-button" type="submit" name="submit-button" id="submit-button">Submit</button>
             </div>
             
@@ -175,7 +219,7 @@
                                 <th>Price</th>
                             </tr>
                                 <?php 
-                                    $sql_get_items = "SELECT * FROM items WHERE item_status = 'available' AND borrowable = 'no'";
+                                    $sql_get_items = "SELECT * FROM items WHERE item_status = 'available' AND borrowable = 'no' AND item_stocks > 0";
                                     $result = $conn->query($sql_get_items);
                                     
                                     while ($row = $result->fetch_assoc()) {
@@ -195,7 +239,7 @@
                                     //for ($i = 0; $i < 10; $i++) {
 
                                     
-                                    $sql_get_items = "SELECT * FROM items WHERE item_status = 'available' AND borrowable = 'yes'";
+                                    $sql_get_items = "SELECT * FROM items WHERE item_status = 'available' AND borrowable = 'yes' AND item_stocks > 0";
                                     $result = $conn->query($sql_get_items);
                                     
 
@@ -220,10 +264,10 @@
                         <table>
                             <tr>
                                 <td id="date-needed-td">
-                                    Date needed: <input type="date" name="date_needed" required>
+                                    Date needed: <input type="date" name="date_needed" id="date_needed" required>
                                 </td>
                                 <td>
-                                    Purpose: <input type="text" name="purpose" placeholder="Purpose" required>
+                                    Purpose: <input type="text" name="purpose" placeholder="Purpose" maxlength="255" required>
                                 </td>
                                 <input type="hidden" id="selectedItems" name="selectedItems">
                             <input type="hidden" id="quantities" name="quantities">
@@ -542,20 +586,40 @@
         return valid;
     }
 
-// Add event listener to the "Next1" button to validate inputs before proceeding
-document.getElementById('next-button1').addEventListener('click', function(event) {
-    // Prevent the default behavior of the button
-    event.preventDefault();
-    
-    // Validate inputs before proceeding
-    if (validateInputs()) {
-        console.log("All inputs are valid. Proceeding to the next step.");
-        moveToFinalStep();
-    }
-});
+    // Add event listener to the "Next1" button to validate inputs before proceeding
+    document.getElementById('next-button1').addEventListener('click', function(event) {
+        // Prevent the default behavior of the button
+        event.preventDefault();
+        
+        // Validate inputs before proceeding
+        if (validateInputs()) {
+            console.log("All inputs are valid. Proceeding to the next step.");
+            moveToFinalStep();
+        }
+    });
 
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateInput = document.getElementById('date_needed');
+        const currentDate = new Date();
 
+        dateInput.addEventListener('input', function () {
+            const selectedDate = new Date(this.value);
+            const threeDaysAfter = new Date(currentDate);
+            threeDaysAfter.setDate(currentDate.getDate() + 2);
+
+            if (selectedDate < threeDaysAfter) {
+                alert('Please select a date at least 3 days after the current date.');
+                this.value = ''; // Reset the input value
+            }
+        });
+
+        // Disable dates less than 3 days from the current date
+        const threeDaysAfter = new Date(currentDate);
+        threeDaysAfter.setDate(currentDate.getDate() + 3);
+        const minDate = threeDaysAfter.toISOString().split('T')[0];
+        dateInput.setAttribute('min', minDate);
+    });
 
 </script>
 </html>

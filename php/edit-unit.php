@@ -19,7 +19,7 @@
 </div>
 <form class="edit-unit-from" action="" method="POST">
     <label for="unit">Unit: <?php echo $unit_name ?></label>
-    <input type="text" name="new-unit" id="new-unit" value="<?php echo $unit_name ?>" required>
+    <input type="text" name="new-unit" id="new-unit" value="<?php echo $unit_name ?>" maxlength="255" required>
     <input type="hidden" name="edit-unit" value="<?php echo $unit_id ?>">
     <button type="submit">Save Changes</button>
 </form>

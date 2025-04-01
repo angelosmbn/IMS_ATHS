@@ -80,9 +80,10 @@ body {
 
 .settings-content-item button {
     width: 200px;
-    height: 25px;
+    height: 35px;
     margin-top: 20px;
     cursor: pointer;
+    font-size: 17px;
 }
 
 .settings-content-item input {

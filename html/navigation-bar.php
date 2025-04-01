@@ -1,7 +1,9 @@
 <?php 
     if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         // Perform logout actions
-        session_destroy(); // Destroy the session data
+        closeConnection();   // Close the database connection
+        session_unset();     // Clear all session variables
+        session_destroy();  // Destroy the session data
         echo "<script>window.location.href='login.php';</script>"; // Redirect to login page
         exit;
     }
@@ -16,7 +18,7 @@
     <link rel="stylesheet" href="../css/navigation-bar.css">
     <link rel="stylesheet" href="../fontawesome-free-6.5.1-web/css/all.min.css"> 
     <link href='https://fonts.googleapis.com/css?family=Jomhuria' rel='stylesheet'>
-    <title>Document</title>
+    <title>IMS ATHS</title>
 </head>
 <body>
     
@@ -177,7 +179,7 @@
                         Management System
                     </div>
                 </div>
-                <div class="arrow">
+                <div class="arrow" id="close-arrow">
                     <a href="">
                         <i class="fa-solid fa-circle-chevron-left"></i>
                     </a>
@@ -279,18 +281,31 @@
     </div>
 </body>
 <script>
+    var profile = false;
+    var click = false;
+    document.addEventListener('click', function(event) {
+        if (profile && !click) {
+            document.querySelector('.profile-sub-menu').style.display = 'none';
+            profile = false;
+        }else{
+            click = false;
+        }
+    });
     function showSubMenu() {
         const profileSubMenu = document.querySelector('.profile-sub-menu');
         if (profileSubMenu.style.display === 'block') {
             profileSubMenu.style.display = 'none';
         } else {
             profileSubMenu.style.display = 'block';
+            profile = true;
+            click = true;
         }
     }
 
 
     document.addEventListener('DOMContentLoaded', function() {
         // Add event listener to the arrow icon
+
         document.querySelector('.arrow a').addEventListener('click', function(event) {
             // Prevent default behavior of anchor tag
             event.preventDefault();
@@ -299,6 +314,22 @@
             document.querySelector('.navigation-container-large').transition = 'all 0.5s';
             document.querySelector('.navigation-container-large').transform = 'scale(1.5)';
             document.querySelector('.navigation-container-large').style.display = 'block';
+            
+            document.querySelector('.notification').style.marginLeft = '370px';
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listener to the arrow icon
+
+        document.querySelector('#close-arrow a').addEventListener('click', function(event) {
+            // Prevent default behavior of anchor tag
+            event.preventDefault();
+            // Hide navigation containers
+            document.querySelector('.navigation-container').style.display = 'block';
+            document.querySelector('.navigation-container-large').transition = 'all 0.5s';
+            document.querySelector('.navigation-container-large').transform = 'scale(-1.5)';
+            document.querySelector('.navigation-container-large').style.display = 'none';
             
             document.querySelector('.notification').style.marginLeft = '370px';
         });
@@ -362,7 +393,8 @@
         }
     <?php endif; ?>
 
-    
+
+
 
 
 </script>

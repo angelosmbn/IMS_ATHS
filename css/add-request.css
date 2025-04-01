@@ -211,9 +211,9 @@ body {
     display: block;
     font-size: 18px;
     position: absolute;
-    margin-left: 350px;
-    width: 30%;
-    top: 70px;
+    margin-left: 400px;
+    width: 700px;
+    top: 60px;
     z-index: 1020;
 }
 .request-department-input select {

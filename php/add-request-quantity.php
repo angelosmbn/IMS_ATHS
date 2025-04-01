@@ -53,7 +53,7 @@
                 echo '<td>' . $available_department . '</td>';
                 echo '<td>' . $row['item_price'] . '</td>';
                 // Add visible input field with initial quantity of 1
-                echo '<td><input type="number" name="quantity[' . $row['item_id'] . ']" min="1" max="' . $row['item_stocks'] + $available_department . '" value="1"></td>';  // Set initial value to 1
+                echo '<td><input type="number" name="quantity[' . $row['item_id'] . ']" min="1" max="' . $row['item_stocks'] + $available_department . '" value="1" maxlength="11"></td>';  // Set initial value to 1
                 echo '<td>' . $row['unit'] . '</td>';
                 echo '</tr>';
             }
@@ -94,7 +94,7 @@
                     echo '<td>' . $available_department . '</td>';
                     echo '<td>' . $row['item_price'] . '</td>';
                     // Add visible input field with initial quantity of 1
-                    echo '<td><input type="number" name="quantity[' . $row['item_id'] . ']" min="1" max="' . $row['item_stocks'] + $available_department . '" value="1"></td>';  // Set initial value to 1
+                    echo '<td><input type="number" name="quantity[' . $row['item_id'] . ']" min="1" max="' . $row['item_stocks'] + $available_department . '" value="1" maxlength="11"></td>';  // Set initial value to 1
                     echo '<td>' . $row['unit'] . '</td>';
                     echo '</tr>';
                 }

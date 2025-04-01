@@ -22,7 +22,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/department-request.css">
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -33,14 +32,15 @@
         <form class="settings-container">
             <div>
                 <label for="department">Department:</label>
-                <select name="department_id" id="department_id" class="scrollable-select">
+                <select name="department_id" id="department_id" class="scrollable-select" required>
                     <?php 
                         $sql_get_departments = "SELECT * FROM departments";
                         $result_get_departments = $conn->query($sql_get_departments);
                         if ($result_get_departments->num_rows > 0) {
                             while ($row_get_departments = $result_get_departments->fetch_assoc()) {
-                                echo '<script>console.log("Department ID: ", '. $row_get_departments['department_id'] .')</script>';
-                                echo "<option value='". $row_get_departments['department_id'] ."'>". $row_get_departments['department_name'] ."</option>";
+                                
+                            echo '<script>console.log("Department ID: ", '. $row_get_departments['department_id'] .')</script>';
+                            echo "<option value='". $row_get_departments['department_id'] ."'>". $row_get_departments['department_name'] ."</option>";
                             }
                         }
                     ?>
@@ -88,6 +88,13 @@
 
             var department_id = $('#department_id').val();
             var school_year = $('#school-year').val();
+
+            // Check if department_id has a value
+            if (!department_id) {
+                alert('Please select a department.');
+                return; // Exit the function if department_id is empty
+            }
+
             $.ajax({
                 type: 'POST',
                 url: '../php/view-requested-items.php',
@@ -99,11 +106,12 @@
                     $('.inbox-table').html(data);
                 },
                 error: function(xhr, status, error) {
-                    console.error('AJAX Error: ' + status + error);
+                    console.error('AJAX Error: ' + status + ' ' + error);
                 }
             });
         });
     });
+
 
     $(document).ready(function() {
     $('#generate-overview').click(function(e) {
@@ -111,19 +119,52 @@
 
         var department_id = $('#department_id').val();
         var school_year = $('#school-year').val();
-        
-        // Construct the URL for PDF generation
-        var pdfUrl = '../php/generate-overview.php?' + $.param({
-            department_id: department_id,
-            school_year: school_year,
-            generate_pdf: true // Parameter to indicate PDF generation
+
+        // Check if department_id has a value
+        if (!department_id) {
+            alert('Please select a department.');
+            return; // Exit the function if department_id is empty
+        }
+
+        var ajaxUrl = ''; // Initialize the URL
+        var postData = {}; // Initialize the POST data
+
+        // Choose the URL and data based on department_id
+        if (department_id != 0) {
+            ajaxUrl = '../php/generate-overview.php';
+            postData = {
+                department_id: department_id,
+                school_year: school_year,
+                generate_pdf: true // Parameter to indicate PDF generation
+            };
+        } else {
+            ajaxUrl = '../php/generate_summary.php';
+            postData = {
+                school_year: school_year,
+                generate_pdf: true // Parameter to indicate PDF generation
+            };
+        }
+
+        // Use AJAX to send the data to the PHP file and handle the PDF generation
+        $.ajax({
+            url: ajaxUrl,
+            type: 'POST',
+            data: postData,
+            success: function(response) {
+                // Create a Blob from the response and open it in a new tab
+                var blob = new Blob([response], { type: 'application/pdf' });
+                var url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            },
+            error: function(xhr, status, error) {
+                console.error("Error generating PDF:", error);
+            },
+            xhrFields: {
+                responseType: 'blob' // Set the response type to blob for PDF
+                }
+            });
         });
-
-        // Open the PDF generation URL in a new window
-        window.open(pdfUrl, 'pdfWindow', 'width=800,height=600');
     });
-});
-
 
 
 

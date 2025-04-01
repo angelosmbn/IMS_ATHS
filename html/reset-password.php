@@ -14,13 +14,15 @@
         $result = mysqli_query($conn, $sql);
         $resultCheck = mysqli_num_rows($result);
         if ($resultCheck > 0) {
-            sendOTP($email, $conn);
-            $email_message = "OTP sent";
+            if(sendOTP($email, $conn)){
+                $email_message = "OTP sent";
+            } else {
+                $email_message = "An error occurred. Please try again later.";
+            }
             $_SESSION['email'] = $email;
         } else {
             $email_message = "Email not found";
         }
-
         echo $email_message;
         exit;
     }
@@ -83,8 +85,11 @@
         $sql = "SELECT * FROM users WHERE email = '$email'";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
-            sendOTP($email, $conn);
-            echo 'OTP sent';
+            if(sendOTP($email, $conn)){
+                echo 'OTP sent';
+            } else {
+                echo 'An error occurred. Please try again later.';
+            }
         } else {
             echo 'Email not found';
         }
@@ -98,7 +103,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../css/reset-password.css">
-    <title>Document</title>
     <style>
         #resend-link {
             display: none;
@@ -121,7 +125,7 @@
                     Please enter your email address. We will send you an OTP to reset your password.
                 </div><br>
                 <label for="email">Email:</label>
-                <input type="text" name="email" id="email" placeholder="Enter your email"><br>
+                <input type="text" name="email" id="email" placeholder="Enter your email" maxlength="255"><br>
                 <input type="hidden" name="email-entered">
                 <p id="email-message"></p>
                 <input type="submit" value="Submit" id="submit-button">
@@ -155,9 +159,9 @@
             </div><br>
             <form action="" method="POST" id="reset-password">
                 <label for="password">New Password:</label>
-                <input type="password" name="password" id="password" placeholder="Enter your new password"><br>
+                <input type="password" name="password" id="password" maxlength="255" placeholder="Enter your new password"><br>
                 <label for="confirm-password" id="confirm-password-label">Confirm Password:</label>
-                <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm your new password"><br>
+                <input type="password" name="confirm-password" id="confirm-password" maxlength="255" placeholder="Confirm your new password"><br>
                 <input type="hidden" name="password-reset">
                 <p id="password-message"></p>
                 <input type="submit" value="Reset Password">

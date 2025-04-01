@@ -13,8 +13,7 @@
 
     $result_get_request = $conn->query($sql_get_request);
     while ($row_get_request = $result_get_request->fetch_assoc()) {
-        $encryptedRequestId = encryptData($row_get_request['request_id'], $key);
-        echo "<script>console.log('".$encryptedRequestId."')</script>";
+        $requestId = $row_get_request['request_id'];
         echo '<tr>';
         echo '<td>' . $row_get_request['requested_date'] . '</td>';
         echo '<td>' . $row_get_request['received_date'] . '</td>';
@@ -24,7 +23,7 @@
         echo '<td class="actions">';
         echo '<button class="btn1" data-user-id="' . $row_get_request['request_id'] . '" onclick="showFloatingContainerEditRequest(' . $row_get_request['request_id'] . ')"><i class="fa-solid fa-eye"></i></button>';
         if ($row_get_request['request_status'] == 'completed') {
-            echo '<button class="btn2" data-user-id="' . $encryptedRequestId . '" onclick="openPDF(\'' . $encryptedRequestId  . '\')"><i class="fa-regular fa-file-pdf"></i></button>';
+            echo '<button class="btn2" data-request-id="' . $requestId . '" onclick="openPDF(this)"><i class="fa-regular fa-file-pdf"></i></button>';
         }
         
         echo '</td>';

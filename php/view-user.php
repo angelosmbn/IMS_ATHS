@@ -21,25 +21,30 @@
 
     $department_array = explode(',', $row['department']);
     $department_names = ''; // Changed variable name to avoid conflict
-    foreach ($department_array as $department_id) { // Changed variable name here too
-        $sql_department = "SELECT department_name FROM departments WHERE department_id = " . $department_id;
-        $result_department = $conn->query($sql_department);
-        $row_department = $result_department->fetch_assoc();
-        $department_names .= $row_department['department_name'] . ', '; // Append department names
+    if ($department_array[0] == '') {
+        $department_names = "No department assigned";
+    }else{
+        foreach ($department_array as $department_id) { // Changed variable name here too
+            $sql_department = "SELECT department_name FROM departments WHERE department_id = " . $department_id;
+            $result_department = $conn->query($sql_department);
+            $row_department = $result_department->fetch_assoc();
+            $department_names .= $row_department['department_name'] . ', '; // Append department names
+        }
     }
+    
 
     // Remove the last comma and any trailing whitespace
     $department_names = rtrim($department_names, ', ');
 
     if ($row['handled_department'] == '') {
-        $handled_department_name = "";
+        $handled_department_name = "N/A";
     } else {
         $sql_get_handled_department = "SELECT department_name FROM departments WHERE department_id = " . $row['handled_department'];
         $result_get_handled_department = $conn->query($sql_get_handled_department);
         $row_get_handled_department = $result_get_handled_department->fetch_assoc();
         $handled_department_name = $row_get_handled_department['department_name'];
     }
-
+    
 
     echo '<tr>';
     echo '<td>' . $row['user_id'] . '</td>';

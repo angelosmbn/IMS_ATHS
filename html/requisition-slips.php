@@ -20,10 +20,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/inbox.css">
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -32,7 +31,7 @@
 <body>
     <div class="inbox-container" id="inbox-container">
         <div class="settings-container">
-            <input type="text" name="search" id="search">
+            <input type="text" name="search" id="search" maxlength="255">
         </div>
         <div class="inbox-table">
             <table id="history-table-for-search">
@@ -85,12 +84,28 @@
         });
     }
 
-    function openPDF(requestId) {
+    function openPDF(button) {
         $(document).ready(function() {
+            var requestId = $(button).data('request-id');  // Get the requestId from the data attribute
             console.log(requestId);
             if (requestId) {
-                window.open('../php/generatePDF.php?request_id=' + requestId, '_blank');
-
+                $.ajax({
+                    url: '../php/generatePDF.php',
+                    type: 'POST',
+                    data: { request_id: requestId },
+                    success: function(response) {
+                        // Create a Blob from the response and open it in a new tab
+                        var blob = new Blob([response], { type: 'application/pdf' });
+                        var url = URL.createObjectURL(blob);
+                        window.open(url, '_blank');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error generating PDF:", error);
+                    },
+                    xhrFields: {
+                        responseType: 'blob' // Set the response type to blob for PDF
+                    }
+                });
             }
         });
     }

@@ -10,7 +10,7 @@
     }
     require '../php/connection.php';
     require_once '../php/config.php';
-    require 'navigation-bar.php';
+    require 'navigation-bar.php'; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +18,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/inbox.css">
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -27,7 +26,7 @@
 <body>
     <div class="inbox-container" id="inbox-container">
         <div class="settings-container">
-            <input type="text" name="search" id="search">
+            <input type="text" name="search" id="search" maxlength="255">
         </div>
         <div class="inbox-table">
             <table id="history-table-for-search">
@@ -79,15 +78,30 @@
         });
     }
 
-    function openPDF(requestId) {
+    function openPDF(button) {
         $(document).ready(function() {
-            console.log(requestId);
+            var requestId = $(button).data('request-id');
             if (requestId) {
-                window.open('../php/generatePDF.php?request_id=' + requestId, '_blank');
+                // Create a form and submit it to open in a new tab
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '../php/generatePDF.php';
+                form.target = '_blank';
 
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'request_id';
+                input.value = requestId;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
             }
         });
     }
+
+
     changeNavBarTitle('History');
 
 

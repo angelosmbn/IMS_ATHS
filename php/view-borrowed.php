@@ -11,7 +11,8 @@
                             JOIN requests r ON ri.request_id_fk = r.request_id
                             JOIN users u ON r.requestor_id = u.user_id
                             WHERE i.borrowable = 'yes' AND 
-                            (r.request_status = 'completed' OR r.request_status = 'confirmation')
+                            (r.request_status = 'completed' OR r.request_status = 'confirmation') AND
+                            ri.is_rejected = 'no'
                             ORDER BY 
                                 CASE
                                     WHEN ri.return_status = 'marked' THEN 1 
@@ -27,7 +28,8 @@
                             JOIN users u ON r.requestor_id = u.user_id
                             WHERE r.requestor_id = '$user_id' AND 
                             i.borrowable = 'yes' AND 
-                            r.request_status = 'completed'
+                            r.request_status = 'completed'AND
+                            ri.is_rejected = 'no'
                             ORDER BY 
                                 CASE
                                     WHEN ri.return_status = 'marked' THEN 1 
@@ -40,7 +42,7 @@
 
     $result_get_request = $conn->query($sql_get_request);
     while ($row_get_request = $result_get_request->fetch_assoc()) {
-        $requestor_name = $row_get_request['last_name'] . ', ' . $row_get_request['first_name'];
+        $requestor_name = $row_get_request['first_name'] . ', ' . $row_get_request['last_name'];
 
         // Check if middle initial exists and is not empty
         if (!empty($row_get_request['middle_name'])) {
@@ -59,12 +61,18 @@
         }
         echo '<td>' . $requestor_name . '</td>';
         echo '<td>' . $row_get_request['item_name'] . '</td>';
+        echo '<td>' . $row_get_request['request_quantity'] . '</td>';
         echo '<td>' . $row_get_request['requested_date'] . '</td>';
         echo '<td>' . $row_get_request['released_date'] . '</td>';
         echo '<td>' . $row_get_request['returned_date'] . '</td>';
         echo '<td>' . $row_get_request['department_name'] . '</td>';
         echo '<td class="actions">';
-        echo '<button class="btn1" data-user-id="' . $row_get_request['request_id'] . '" onclick="showFloatingContainerEditRequest(' . $row_get_request['request_id'] . ', ' . $row_get_request['requested_items_id'] . ')"><i class="fa-solid fa-eye"></i></button>';
+        echo '<button class="btn1" data-user-id="' . $row_get_request['request_id'] . '" 
+        onclick="showFloatingContainerEditRequest(' . $row_get_request['request_id'] . ', ' 
+        . $row_get_request['requested_items_id'] . ', ' 
+        . $row_get_request['requesting_department_id'] . ')">
+        <i class="fa-solid fa-eye"></i>
+      </button>';
 
         echo '</td>';
         echo '</tr>';

@@ -51,7 +51,11 @@
                 $sql_get_school_year = "SELECT * FROM school_year ORDER BY school_year_id ASC LIMIT 1";
                 $result_get_school_year = $conn->query($sql_get_school_year);
                 $row_get_school_year = $result_get_school_year->fetch_assoc();
-                $_SESSION['school_year'] = $row_get_school_year['school_year'];
+                if ($result_get_school_year->num_rows > 0) {
+                    $_SESSION['school_year'] = $row_get_school_year['school_year'];
+                }else{
+                    $_SESSION['school_year'] = "0000-0000";
+                }
                 
                 
 
@@ -161,7 +165,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../css/login.css">
-    <title>Document</title>
+    <title>ATHS IMS</title>
 </head>
 <body>
     <div class="main">
@@ -170,10 +174,10 @@
             <div class="login-form" id="login-form">
                 
                 <form action="" name="login" id="login" method="POST" autocomplete="on">
-                    <h2>Sign in to Website</h2>
+                    <h2>Sign in to IMS</h2>
                     <input type="hidden" name="login_form" value="1">
-                    <input type="text" name="username" placeholder="Username" required>
-                    <input type="password"  autocomplete="on" name="password-login" placeholder="Password" required>
+                    <input type="text" name="username" placeholder="Username" maxlength="255" required>
+                    <input type="password"  autocomplete="on" name="password-login" placeholder="Password" maxlength="255" required>
                     <a href="reset-password.php">Forgot Password?</a>
                     <button type="submit">SIGN IN</button><br>
                     <div id="login-message"></div>
@@ -185,18 +189,18 @@
                     <input type="hidden" name="signup_form" value="1">
                     <h2>Sign up</h2>
                     
-                        <input type="text" name="first_name" placeholder="First Name" value="<?php echo !empty($first_name) ? $first_name : "" ?>" required>
-                        <input type="text" name="middle_name" placeholder="Middle Name" value="<?php echo !empty($middle_name) ? $middle_name : "" ?>">
+                        <input type="text" name="first_name" placeholder="First Name" value="<?php echo !empty($first_name) ? $first_name : "" ?>" maxlength="255" required>
+                        <input type="text" name="middle_name" placeholder="Middle Name" value="<?php echo !empty($middle_name) ? $middle_name : "" ?>" maxlength="255">
                     
-                        <input type="text" name="last_name" placeholder="Last Name" value="<?php echo !empty($last_name) ? $last_name : "" ?>" required>
-                        <input type="text" name="acc_username" placeholder="Username"  value="<?php echo !empty($acc_username) ? $acc_username : "" ?>" required>
+                        <input type="text" name="last_name" placeholder="Last Name" value="<?php echo !empty($last_name) ? $last_name : "" ?>" maxlength="255" required>
+                        <input type="text" name="acc_username" placeholder="Username" minlength="8" value="<?php echo !empty($acc_username) ? $acc_username : "" ?>" maxlength="255" required>
                         
                     
-                        <input type="email" name="email" placeholder="Email"  value="<?php echo !empty($email) ? $email : "" ?>" required>
-                        <input type="text" id="contact" name="contact" placeholder="e.g., 0912-345-6789" maxlength="13" pattern="09\d{2}-\d{3}-\d{4}" value="<?php echo !empty($contact) ? $contact : "" ?>" required oninput="formatPhoneNumber(this)">
+                        <input type="email" name="email" placeholder="Email"  value="<?php echo !empty($email) ? $email : "" ?>" maxlength="255" required>
+                        <input type="text" id="contact" name="contact" placeholder="e.g., 09000000000" maxlength="11" pattern="09\d{9}" value="<?php echo !empty($contact) ? $contact : "" ?>" maxlength="255" required>
                     
-                        <input type="password" name="password-signup"  autocomplete="on" placeholder="Password" required >
-                        <input type="password" name="confirmPassword"  autocomplete="on" placeholder="Confirm Password" required>
+                        <input type="password" name="password-signup"  autocomplete="on" minlength="8" placeholder="Password" maxlength="255" required >
+                        <input type="password" name="confirmPassword"  autocomplete="on" minlength="8" placeholder="Confirm Password" maxlength="255" required>
                     
                     <button type="submit">SIGN UP</button>
                     <div id="signup-message"></div>
@@ -358,19 +362,6 @@
                 });
             });
         });
-        function formatPhoneNumber(input) {
-            let value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
-
-            // Format 0912-345-6789
-            if (value.length > 3) {
-                value = value.replace(/(\d{4})(\d{0,3})/, '$1-$2');
-            }
-            if (value.length > 7) {
-                value = value.replace(/(\d{4})-(\d{3})(\d{0,4})/, '$1-$2-$3');
-            }
-
-            input.value = value;
-        }
     </script>
 
 

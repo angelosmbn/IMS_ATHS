@@ -39,38 +39,89 @@
             $sql_get_monitoring = "SELECT * FROM stock_monitoring st
                                 JOIN departments d ON st.requesting_department_id  = d.department_id
                                 JOIN accumulable a ON st.item_id = a.item_id_fk AND st.requesting_department_id = a.department_id_fk
-                                WHERE item_id = " . $item_id . " ORDER BY timestamp_added ASC";
+                                WHERE item_id = " . $item_id . " 
+                                ORDER BY monitoring_id ASC";
             $result = $conn->query($sql_get_monitoring);
-
+            $prev_ReqID = 0;
+            $prev_ReqDeptID = 0;
+            $prev_ChargedDeptID = 0;
+            $prev_Qty = 0;
+            $prev_ItemID = 0;
+            $num_rows = $result->num_rows;
+            $prev_QtyFlag = true;
+            $i = 0;
             while ($row = $result->fetch_assoc()) {
-                echo '<tr>';
-                echo '<td>' . $row['beginning_inventory_general'] . '</td>';
+                if ($prev_ReqID == $row['request_id'] && $prev_ReqID != 0 && $row['requesting_department_id'] == $prev_ReqDeptID && $row['charged_department_id'] == $prev_ChargedDeptID && $row['purpose'] != 'Returned' && $num_rows != 1 && $prev_ItemID == $row['item_id']) {
+                    echo '<tr>';
+                    echo '<td>' . $row['beginning_inventory_general'] + $prev_Qty . '</td>';
+    
+                    echo '<td>' . $row['item_purchases'] . 'asd'. '</td>';
+                    echo '<td>' . $row['item_cost'] . '</td>';
+                    echo '<td>' . $row['requested_quantity_general'] + $prev_Qty . '</td>';
+                    echo '<td>' . date('F j, Y', strtotime($row['requested_date'])) . '</td>';
+                    if ($row['release_date'] == NULL) {
+                        echo '<td></td>';
+                    } else {
+                        echo '<td>' . date('F j, Y', strtotime($row['release_date'])) . '</td>';
+                    }
+                    echo '<td>' . $row['ending_inventory_general'] . '</td>';
+                    $sql_get_department_charged_name = "SELECT * FROM departments WHERE department_id = " . $row['charged_department_id'];
+                    $result_charged = $conn->query($sql_get_department_charged_name);
+                    $row_charged = $result_charged->fetch_assoc();
+                    if ($row['purpose'] == 'Add Stocks') {
+                        echo '<td></td>';
+                        echo '<td></td>';
+                    } else {
+                        echo '<td>' . $row['department_name'] . '</td>';
+                        echo '<td>' . $row_charged['department_name'] . '</td>';
+                    }
+                    echo '<td>' . $row['purpose'] . '</td>';
+                    echo '</tr>';
+                
+                    $prev_QtyFlag = true;
+                } elseif($prev_ReqID == 0 && $num_rows != 1 && ($row['purpose'] == 'Returned' || $row['purpose'] == 'Add Stocks') && $i != 0) {
 
-                echo '<td>' . $row['item_purchases'] . '</td>';
-                echo '<td>' . $row['item_cost'] . '</td>';
-
-                echo '<td>' . $row['requested_quantity_general'] . '</td>';
-
-                echo '<td>' . date('F j, Y', strtotime($row['requested_date'])) . '</td>';
-                if ($row['release_date'] == NULL) {
-                    echo '<td></td>';
-                } else {
-                    echo '<td>' . date('F j, Y', strtotime($row['release_date'])) . '</td>';
+                }else{
+    
+                    echo '<tr>';
+                    echo '<td>' . $row['beginning_inventory_general'] . '</td>';
+                    echo '<td>' . $row['item_purchases'] . '</td>';
+                    echo '<td>' . $row['item_cost'] . '</td>';
+                    echo '<td>' . $row['requested_quantity_general'] . '</td>';
+                    echo '<td>' . date('F j, Y', strtotime($row['requested_date'])) . '</td>';
+                    if ($row['release_date'] == NULL) {
+                        echo '<td></td>';
+                    } else {
+                        echo '<td>' . date('F j, Y', strtotime($row['release_date'])) . '</td>';
+                    }
+                    echo '<td>' . $row['ending_inventory_general'] . '</td>';
+                    $sql_get_department_charged_name = "SELECT * FROM departments WHERE department_id = " . $row['charged_department_id'];
+                    $result_charged = $conn->query($sql_get_department_charged_name);
+                    $row_charged = $result_charged->fetch_assoc();
+                    if ($row['purpose'] == 'Add Stocks') {
+                        echo '<td></td>';
+                        echo '<td></td>';
+                    } else {
+                        echo '<td>' . $row['department_name'] . '</td>';
+                        echo '<td>' . $row_charged['department_name'] . '</td>';
+                    }
+                    echo '<td>' . $row['purpose'] . '</td>';
+                    echo '</tr>';
+                    $prev_QtyFlag = false;
                 }
+                if ($prev_QtyFlag) {
+                    $prev_Qty = $row['requested_quantity_general'];
+                } else {
+                    $prev_Qty = 0;
+                }
+                $i = 1;
+                $prev_ReqID = $row['request_id'];
+                $prev_ReqDeptID = $row['requesting_department_id'];
+                $prev_ChargedDeptID = $row['charged_department_id'];
+                $prev_ItemID = $row['item_id'];
 
-
-                echo '<td>' . $row['ending_inventory_general'] . '</td>';
-
-
-
-                echo '<td>' . $row['department_name'] . '</td>';
-                $sql_get_department_charged_name = "SELECT * FROM departments WHERE department_id = " . $row['charged_department_id'];
-                $result_charged = $conn->query($sql_get_department_charged_name);
-                $row_charged = $result_charged->fetch_assoc();
-                echo '<td>' . $row_charged['department_name'] . '</td>';
-                echo '<td>' . $row['purpose'] . '</td>';
-                echo '</tr>';
-            
+                echo '<script>console.log('. $prev_Qty .')</script>';
+                echo '<script>console.log('. $prev_Qty .')</script>';
             }
         
         ?>

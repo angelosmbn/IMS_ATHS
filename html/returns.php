@@ -9,7 +9,7 @@
         echo "<script>window.location.href='login.php';</script>";
     }
     require '../php/connection.php';
-    require 'navigation-bar.php';
+    require '../html/navigation-bar.php';
     require '../php/add-department.php';
 
     if (isset($_POST['return-button'])) {
@@ -34,17 +34,25 @@
             $ending_inventory_general = $row_get_stocks['item_stocks'] + $row_get_request_items['request_quantity'];
             $school_year = $row_get_request_items['school_year'];
             
-            $sql_insert_stock_monitoring = "INSERT INTO stock_monitoring (request_id, item_id, requesting_department_id, beginning_inventory_general, item_cost, requested_quantity_general, requested_date, release_date, ending_inventory_general, school_year, purpose) VALUES 
-                                ('$request_id', '{$row_get_request_items['item_id_fk']}', '{$row_get_request_items['charged_department']}', '{$row_get_stocks['item_stocks']}', '{$row_get_request_items['item_price']}', '{$row_get_request_items['request_quantity']}', '{$row_get_request_items['requested_date']}', '$release_date', '$ending_inventory_general', '$school_year', 'Returned')";
-            echo "<script>alert('". $row_get_request_items['item_id_fk'] ."')</script>";
+            $sql_insert_stock_monitoring = "INSERT INTO stock_monitoring (request_id, item_id, requesting_department_id, beginning_inventory_general, item_cost, requested_quantity_general, requested_date, release_date, ending_inventory_general, school_year, purpose, is_borrowable, charged_department_id) VALUES 
+                                ('$request_id', '{$row_get_request_items['item_id_fk']}', '{$row_get_request_items['charged_department']}', '{$row_get_stocks['item_stocks']}', '{$row_get_request_items['item_price']}', '{$row_get_request_items['request_quantity']}', '{$row_get_request_items['requested_date']}', '$release_date', '$ending_inventory_general', '$school_year', 'Returned', 'yes', '{$row_get_request_items['requesting_department_id']}')";
+            
             if ($conn->query($sql_insert_stock_monitoring) === TRUE) {
                 $sql_return_stocks = "UPDATE items i
                             JOIN requested_items ri ON i.item_id = ri.item_id_fk
                             SET i.item_stocks = i.item_stocks + ri.request_quantity
                             WHERE ri.request_id_fk = '$request_id' AND ri.requested_items_id = '$requested_items_id'";
                 if ($conn->query($sql_return_stocks) === TRUE) {
-                    echo "<script>alert('Item successfully returned1!')</script>";
-                    echo "<script>window.location.href='returns.php';</script>";
+                    $sql_update_item_stock_monitoring = "UPDATE stock_monitoring SET
+                                                        is_shown = 'no'
+                                                        WHERE request_id = '$request_id' AND item_id = '{$row_get_request_items['item_id_fk']}'
+                                                        AND monitoring_id = '{$row_get_request_items['stock_monitoring_id']}'
+                                                        AND charged_department_id = '{$row_get_request_items['requesting_department_id']}'";
+                    if ($conn->query($sql_update_item_stock_monitoring) === TRUE) {
+
+                        echo "<script>alert('Item successfully returned1!')</script>";
+                        echo "<script>window.location.href='returns.php';</script>";
+                    }
                 } else {
                     echo "<script>alert('Error returning item!')</script>";
                     echo "<script>window.location.href='returns.php';</script>";
@@ -79,7 +87,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/returns.css">
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -88,7 +95,7 @@
 <body>
     <div class="inbox-container" id="inbox-container">
         <div class="settings-container">
-            <input type="text" name="search" id="search">
+            <input type="text" name="search" id="search" maxlength="255">
         </div>
         <div class="inbox-table">
             <table id="returns-table">
@@ -96,6 +103,7 @@
                     <th></th>
                     <th>Requested By</th>
                     <th>Item</th>
+                    <th>Quantity</th>
                     <th>Requested On</th>
                     <th>Released On</th>
                     <th>Returned On</th>
@@ -109,8 +117,10 @@
         </div>
 
         <div class="floating-editRequest-container" id="floating-editRequest-container">
-            <span class="close-icon" onclick="hideFloatingContainerEditRequest()">&#10006;</span>
-            <h2 class="form-title">Request Details</h2>
+            <div class="bar">
+                <span>Borrowed Item Details</span>
+                <span class="close-icon" onclick="hideFloatingContainerEditRequest()">&#10006;</span>
+            </div>
             <form action="" method="POST">
                 <div class="request-details" id="request-details">
 
@@ -128,15 +138,16 @@
         document.querySelector('.floating-addCategory-container').style.display = 'block';
     }
 
-    function showFloatingContainerEditRequest(requestId, requestedItemsId) {
+    function showFloatingContainerEditRequest(requestId, requestedItemsId, departmentId) {
         $(document).ready(function() {
             document.getElementById('floating-editRequest-container').style.display = 'block';
             console.log(requestId);
             console.log(requestedItemsId);
-            if (requestId && requestedItemsId) {
+            if (requestId && requestedItemsId && departmentId) {
                 $('#request-details').load('../php/return_item.php', {
                     request_id: requestId,
-                    requested_items_id: requestedItemsId
+                    requested_items_id: requestedItemsId,
+                    department_id: departmentId
                 });
             }
         });

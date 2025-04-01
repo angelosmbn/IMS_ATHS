@@ -26,7 +26,7 @@
         $new_item_price = $_POST['item-price'];
         $new_item_indicator = $_POST['item-indicator'];
         $new_borrowable = $_POST['borrowable'];
-        $new_hide = $_POST['hide'];
+        $new_status = $_POST['status'];
         $sql_check_changes = "SELECT * FROM items WHERE item_id = $item_id";
         $result = $conn->query($sql_check_changes);
 
@@ -40,11 +40,11 @@
         $item_price = $row['item_price'];
         $item_indicator = $row['restock_indicator'];
         $borrowable = $row['borrowable'];
-        $hide = $row['hide'];
+        $status = $row['status'];
 
 
-        if ($new_item_name != $item_name || $new_item_category != $item_category || $new_item_brand != $item_brand || $new_item_description != $item_description || $new_item_stocks != $item_stocks || $new_item_unit != $item_unit || $new_item_price != $item_price || $new_item_indicator != $item_indicator || $new_borrowable != $borrowable || $new_hide!= $hide) {
-            $sql_update_item = "UPDATE items SET item_name = '$new_item_name', item_category = '$new_item_category', item_brand = '$new_item_brand', item_description = '$new_item_description', item_stocks = $new_item_stocks, unit = '$new_item_unit', item_price = $new_item_price, restock_indicator = $new_item_indicator, borrowable = '$new_borrowable', hide_status = '$new_hide' WHERE item_id = $item_id";
+        if ($new_item_name != $item_name || $new_item_category != $item_category || $new_item_brand != $item_brand || $new_item_description != $item_description || $new_item_stocks != $item_stocks || $new_item_unit != $item_unit || $new_item_price != $item_price || $new_item_indicator != $item_indicator || $new_borrowable != $borrowable || $new_status!= $status) {
+            $sql_update_item = "UPDATE items SET item_name = '$new_item_name', item_category = '$new_item_category', item_brand = '$new_item_brand', item_description = '$new_item_description', item_stocks = $new_item_stocks, unit = '$new_item_unit', item_price = $new_item_price, restock_indicator = $new_item_indicator, borrowable = '$new_borrowable', item_status = '$new_status' WHERE item_id = $item_id";
             if ($conn->query($sql_update_item) === TRUE) {
                 echo "<script>alert('Item updated successfully.')</script>";
                 echo "<script>window.location.href = 'inventory.php'</script>";
@@ -69,11 +69,11 @@
             $row = $result->fetch_assoc();
             $beginning_inventory = $row['item_stocks'] - $stocks_quantity;
             $ending_inventory = $beginning_inventory + $stocks_quantity;
-            echo "<script>alert('". $beginning_inventory . " + " . $stocks_quantity . " = " . $ending_inventory . "')</script>";
+            $school_year = $_SESSION['school_year'];
 
             $purchase_date = date('Y-m-d H:i:s');
-            $sql_add_monitoring = "INSERT INTO stock_monitoring (item_id, beginning_inventory_general, item_purchases, requested_date, release_date, ending_inventory_general, purpose) 
-            VALUES ('$item_id', '$beginning_inventory', '$stocks_quantity', '$purchase_date', '$purchase_date', '$ending_inventory', 'Add Stocks')";
+            $sql_add_monitoring = "INSERT INTO stock_monitoring (item_id, beginning_inventory_general, item_purchases, requested_date, release_date, ending_inventory_general, purpose, school_year) 
+            VALUES ('$item_id', '$beginning_inventory', '$stocks_quantity', '$purchase_date', '$purchase_date', '$ending_inventory', 'Add Stocks', '$school_year')";
             $conn->query($sql_add_monitoring);
 
 
@@ -95,7 +95,6 @@
     <link rel="stylesheet" type="text/css" href="../css/view-item.css">
     <link rel="stylesheet" type="text/css" href="../css/edit-item.css">
     <link rel="stylesheet" type="text/css" href="../css/add-stocks.css">
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -104,7 +103,7 @@
 <body>
     <div class="inventory-container" id="inventory-container">
         <div class="settings-container">
-        <input type="text" name="searchInput" id="searchInput" placeholder="Search">
+        <input type="text" name="searchInput" id="searchInput" placeholder="Search" maxlength="255">
             <div>
                 <?php   
                     echo '<button onclick="showFloatingContainerAddRequest()">+ Add Request</button>';
@@ -127,7 +126,7 @@
                     <th class="small-width">Requested Stocks</th>
                     <th>Price</th>
                     <?php 
-                        if($_SESSION['access_level'] == 'inventory manager') {
+                        if($_SESSION['access_level'] == 'inventory manager' || $_SESSION['access_level'] == 'finance officer') {
                             echo '<th>Action</th>';
                         }
                     ?>

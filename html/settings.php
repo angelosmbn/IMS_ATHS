@@ -173,7 +173,6 @@
     <link rel="stylesheet" href="../css/settings.css">
     <link rel="stylesheet" href="../fontawesome-free-6.5.1-web/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <title>Document</title>
 </head>
 <body>
     <div class="floating-settings-container" id="floating-settings-container">
@@ -219,7 +218,7 @@
                                 <label for="old-password">Old Password</label>
                             </td>
                             <td>
-                                <input type="password" name="old-password" id="old-password" autocomplete="on" placeholder="Current Password">
+                                <input type="password" name="old-password" id="old-password" autocomplete="on" placeholder="Current Password" maxlength="255">
                             </td>
                         </tr>
                         <tr>
@@ -228,7 +227,7 @@
                             
                             </td>
                             <td>
-                                <input type="password" name="new-password" id="new-password" autocomplete="on" placeholder="New Password">
+                                <input type="password" name="new-password" id="new-password" autocomplete="on" placeholder="New Password" maxlength="255">
                             </td>
                         </tr>
                         <tr>
@@ -236,7 +235,7 @@
                                 <label for="confirm-password">Confirm Password</label>
                             </td>
                             <td>
-                                <input type="password" name="confirm-password" id="confirm-password" autocomplete="on" placeholder="Confirm Password">
+                                <input type="password" name="confirm-password" id="confirm-password" autocomplete="on" placeholder="Confirm Password" maxlength="255">
                             </td>
                         </tr>
                         <?php 
@@ -268,7 +267,7 @@
                                 <label for="new-email">New Email</label>
                             </td>
                             <td>
-                                <input type="email" name="new-email" id="new-email" placeholder="New Email">
+                                <input type="email" name="new-email" id="new-email" placeholder="New Email" maxlength="255">
                             </td>
                         </tr>
                         <?php 
@@ -300,7 +299,7 @@
                                 <label for="new-username">New Username</label>
                             </td>
                             <td>
-                                <input type="text" name="new-username" id="new-username" placeholder="New Username">
+                                <input type="text" name="new-username" id="new-username" placeholder="New Username" maxlength="255">
                             </td>
                         </tr>
                         <?php 

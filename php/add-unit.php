@@ -65,7 +65,6 @@
     <link rel="stylesheet" href="../css/add-unit.css">
     <link rel="stylesheet" href="../fontawesome-free-6.5.1-web/css/all.min.css">
     
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -80,7 +79,7 @@
         </div>
         <form class="add-unit-from" action="" method="POST">
             <label for="unit">Unit:</label>
-            <input type="text" name="unit" id="unit" required>
+            <input type="text" name="unit" id="unit" maxlength="255" required>
             <button type="submit" name="add-unit">Add Unit</button>
             <?php 
                 echo "<span id='response'></span>"

@@ -46,7 +46,7 @@
 
     foreach ($access_levels as $level) {
         $selected = ($level == $row['access_level']) ? 'selected' : '';
-        echo '<option value="' . $level . '" ' . $selected . '>' . ucfirst($level) . '</option>';
+        echo '<option value="' . $level . '" ' . $selected . '>' . ucwords($level) . '</option>';
     }
 
     echo '</select></td>';

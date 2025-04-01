@@ -56,8 +56,6 @@
 
     <link rel="stylesheet" href="../css/add-item.css">
     <link rel="stylesheet" href="../fontawesome-free-6.5.1-web/css/all.min.css">
-    
-    <title>Document</title>
 </head>
 <body>
     <div class="floating-addItem-container" id="floating-addItem-container">
@@ -85,7 +83,7 @@
                             ?>
                         </select>
                     </td>
-                    <td><input type="text" name="item-name" id="item-name" required></td>
+                    <td><input type="text" name="item-name" id="item-name" maxlength="255" required></td>
                 </tr>
 
                 <tr>
@@ -93,8 +91,8 @@
                     <td><label for="item-description">Item Description</label></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="item-brand" id="item-brand" required></td>
-                    <td><input type="text" name="item-description" id="item-description" required></td>
+                    <td><input type="text" name="item-brand" id="item-brand" maxlength="255" required></td>
+                    <td><input type="text" name="item-description" id="item-description" maxlength="255" required></td>
                 </tr>
 
                 <tr>
@@ -102,7 +100,7 @@
                     <td><label for="item-unit">Item Unit</label></td>
                 </tr>
                 <tr>
-                    <td><input type="number" name="item-stocks" id="item-stocks" pattern="[0-9]+" title="Please enter a positive integer" required></td>
+                    <td><input type="number" name="item-stocks" id="item-stocks" pattern="[0-9]+" title="Please enter a positive integer" maxlength="11" min="0" required></td>
                     <td>
                         <select name="item-unit" id="item-unit" required>
                             <option value="">Select Unit</option>
@@ -121,8 +119,8 @@
                     <td><label for="item-indicator">Restock Indicator</label></td>
                 </tr>
                 <tr>
-                    <td><input type="number" step="0.01" name="item-price" id="item-price" required></td>
-                    <td><input type="text" name="item-indicator" id="item-indicator" pattern="[0-9]+" title="Please enter a positive integer"></td>
+                    <td><input type="number" step="0.01" name="item-price" id="item-price" maxlength="11" required></td>
+                    <td><input type="text" name="item-indicator" id="item-indicator" pattern="[0-9]+" maxlength="11" min="0" title="Please enter a positive integer"></td>
                 </tr>
                 
                 <tr>

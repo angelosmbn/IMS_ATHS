@@ -8,18 +8,21 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Extend FPDF to add a header method
-class PDF extends FPDF {
-    function Header() {
+class PDF extends FPDF
+{
+    function Header()
+    {
         // Add image to all pages
         $this->Image('../resources/aths-logo-transparent.png', 60, 100, 95, 95);
-    
+
         // Add image only on the first page
         if ($this->PageNo() == 1) {
             $this->Image('../resources/athsss.png', 45, 7, 15, 15);
         }
     }
-    
-    function Footer() {
+
+    function Footer()
+    {
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
@@ -31,9 +34,10 @@ class PDF extends FPDF {
 $name = $request_date = $coordinator_signature = $finance_signature = $requestor_signature = '';
 $coordinator_name = $finance_name = $requestor_name = $request_status = $comment = '';
 
-if (isset($_GET['request_id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $requestId = decryptData($_GET['request_id'], $key);
+    $requestId = $_POST['request_id'];
+    //$requestId = $_GET['request_id'];
     $sql = "SELECT * FROM requests r 
             JOIN users u ON r.requestor_id = u.user_id
             JOIN departments d ON r.charged_department = d.department_id
@@ -54,53 +58,69 @@ if (isset($_GET['request_id'])) {
         $request_status = $row['request_status'];
         $comment = $row['finance_comment'];
 
-        $get_coordinator_name = "SELECT * FROM users WHERE user_id = " . $row['coordinator_id'];
+        // Sanitize and prepare the coordinator ID
+        $coordinatorId = intval($row['coordinator_id']); // Convert to integer
+
+        // Construct the query with the sanitized ID
+        $get_coordinator_name = "SELECT * FROM users WHERE user_id = $coordinatorId";
+
+        // Execute the query
         $result_coordinator_name = mysqli_query($conn, $get_coordinator_name);
-        $row_coordinator = mysqli_fetch_assoc($result_coordinator_name);
-        $coordinator_name = $row_coordinator['first_name'] . ' ' . $row_coordinator['last_name'];
+
+        // Check for errors in the query execution
+        if (!$result_coordinator_name) {
+            die('Query error: ' . htmlspecialchars(mysqli_error($conn)));
+        }
+        // Check if any rows are returned
+        if (mysqli_num_rows($result_coordinator_name) > 0) {
+            // Fetch the result as an associative array
+            $row_coordinator = mysqli_fetch_assoc($result_coordinator_name);
+            $coordinator_name = $row_coordinator['first_name'] . ' ' . $row_coordinator['last_name'];
+        } else {
+            $coordinator_name = 'N/A';
+        }
 
         $get_finance_name = "SELECT * FROM users WHERE user_id = " . $row['finance_id'];
         $result_finance_name = mysqli_query($conn, $get_finance_name);
         $row_finance = mysqli_fetch_assoc($result_finance_name);
         $finance_name = $row_finance['first_name'] . ' ' . $row_finance['last_name'];
     }
-}else {
-    echo "<script>alert('asdf');</script>";
+} else {
+    echo "<script>window.location('../html/requisition-slips.php')</script>";
+    exit;
 }
-ob_start();
-
 $pdf = new PDF("P", "mm", "Letter");
 
 $pdf->AddPage();
 
 $pdf->SetFont('Arial', 'B', 13);
-$pdf->Cell(0, 5, 'ASSUMPTA TECHNICAL HIGH SCHOOL',0,1,"C");
-$pdf->Cell(0, 5, 'Sta. Monica, San Simon, Pampanga',0,1,"C");
+$pdf->Cell(0, 5, 'ASSUMPTA TECHNICAL HIGH SCHOOL', 0, 1, "C");
+$pdf->Cell(0, 5, 'Sta. Monica, San Simon, Pampanga', 0, 1, "C");
 
 $pdf->SetFont('Arial', '', 14);
-$pdf->Cell(0, 5, '',0,1);
-$pdf->Cell(0, 5, 'REQUISITION SLIP',0,1,"C");
+$pdf->Cell(0, 5, '', 0, 1);
+$pdf->Cell(0, 5, 'REQUISITION SLIP', 0, 1, "C");
 
 $pdf->SetFont('Arial', '', 11);
-$pdf->Cell(0, 5, 'MATERIALS',0,1,"C");
+$pdf->Cell(0, 5, 'MATERIALS', 0, 1, "C");
 
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(0, 5, '',0,1);
-$pdf->Cell(15, 5, 'NAME:',0,0);
-$pdf->Cell(111, 5, '',0,0);
+$pdf->Cell(0, 5, '', 0, 1);
+$pdf->Cell(15, 5, 'NAME:', 0, 0);
+$pdf->Cell(111, 5, '', 0, 0);
 $pdf->Cell(35, 5, 'REQUEST DATE: ', 0, 0);
-$pdf->Cell(35, 5, '',0,0);
+$pdf->Cell(35, 5, '', 0, 0);
 $detailsPositions = $pdf->GetY();
-$pdf->Cell(0,10,'',0,1);
+$pdf->Cell(0, 10, '', 0, 1);
 
 $pdf->SetFont('Arial', '', 11);
 
 $pdf->SetY($detailsPositions);
-$pdf->Cell(15, 5, '',0,0);
-$pdf->Cell(111, 5, $name,0,0);
-$pdf->Cell(35, 5, '',0,0);
-$pdf->Cell(35, 5, $request_date,0,0);
-$pdf->Cell(0,10,'',0,1);
+$pdf->Cell(15, 5, '', 0, 0);
+$pdf->Cell(111, 5, $name, 0, 0);
+$pdf->Cell(35, 5, '', 0, 0);
+$pdf->Cell(35, 5, $request_date, 0, 0);
+$pdf->Cell(0, 10, '', 0, 1);
 
 $pdf->SetFont('Arial', 'B', 10);
 
@@ -125,18 +145,23 @@ $pdf->MultiCell(25, 5, 'CHARGE' . "\n" . 'ACCOUNT', 1, "C");
 $pdf->SetFont('Arial', '', 10);
 
 // If request_id is set, fetch and display requested items
-if (true) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $requestId = $_POST['request_id'];
     $total = 0;
+
+
     $sql = "SELECT * FROM stock_monitoring st
-            JOIN departments d ON st.requesting_department_id = d.department_id
+            JOIN departments d ON st.charged_department_id = d.department_id
             JOIN items i ON st.item_id = i.item_id
             JOIN requests r ON st.request_id = r.request_id
-            WHERE st.request_id = '$requestId'";
+            WHERE st.request_id = '$requestId'
+            AND st.is_shown = 'yes'";
     $result = mysqli_query($conn, $sql);
     $resultCheck = mysqli_num_rows($result);
 
     if ($resultCheck > 0) {
-        
+
         $i = 0;
         while ($row = mysqli_fetch_assoc($result)) {
             $pdf->Cell(50, 5, $row['item_name'], 1, 0, "C");
@@ -145,7 +170,7 @@ if (true) {
             $pdf->Cell(30, 5, '' . number_format($row['item_cost'], 2), 1, 0, "C");
             $pdf->Cell(20, 5, $row['needed_date'], 1, 0, "C");
             $pdf->Cell(25, 5, $row['department_name'], 1, 1, "C");
-            $total += $row['item_cost'];
+            $total += ($row['item_cost'] * $row['requested_quantity_general']);
             $i++;
         }
 
@@ -165,7 +190,9 @@ if (true) {
 
         $pdf->SetX(150);
         $pdf->Cell(31, 5, 'Grand Total', 1, 0, "C");
-        $pdf->Cell(25, 5, '' . $total, 1, 1, "C");
+        $pdf->Cell(25, 5, '' . number_format($total, 2, '.', ','), 1, 1, "C");
+    } else {
+        $pdf->Cell(196, 5, 'An error occurred. Please try again later.', 1, 0, "C");
     }
 }
 
@@ -196,7 +223,7 @@ if ($finance_signature == 'APPROVED') {
     $pdf->Cell(77, 2, '', 0, 0, "C");
 }
 
-if ($requestor_signature == 'APPROVED') {  
+if ($requestor_signature == 'APPROVED') {
     $pdf->Cell(55, 2, 'SIGNED', 0, 0, "C");
 } else {
     $pdf->Cell(55, 2, '', 0, 0, "C");
@@ -231,9 +258,16 @@ $pdf->SetXY($startX, $startY + 5);
 $pdf->Cell(57, 5, 'Coordinator', 0, 0, "C");
 $pdf->Cell(10, 5, '', 0, 0);
 $pdf->Cell(57, 5, 'Finance Officer', 0, 1, "C");
-ob_get_clean();
 
-$pdf->Output();
-$pdf_file = $pdf->Output("S");
+// Before any output, add these headers
+header('Content-Type: application/pdf');
+header('Content-Disposition: inline; filename="requisition_slip.pdf"');
+
+// Clear any output buffers
+while (ob_get_level()) {
+    ob_end_clean();
+}
+
+$pdf->Output('I', 'requisition_slip.pdf');
 
 ?>

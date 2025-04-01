@@ -66,7 +66,6 @@
     <link rel="stylesheet" href="../css/add-category.css">
     <link rel="stylesheet" href="../fontawesome-free-6.5.1-web/css/all.min.css">
     
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -81,7 +80,7 @@
         </div>
         <form class="add-category-from" action="" method="POST">
             <label for="category">Category:</label>
-            <input type="text" name="category" id="category" required>
+            <input type="text" name="category" id="category" maxlength="255" required>
             <button type="submit" name="add-category">Add Category</button>
             <?php 
                 echo "<span id='response'></span>"

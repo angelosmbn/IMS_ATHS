@@ -14,14 +14,14 @@ function renderItems($conn, $conditions, $sessionCheck = false) {
             FROM requested_items ri 
             JOIN requests r ON ri.request_id_fk = r.request_id 
             WHERE item_id_fk = {$row['item_id']} AND 
-            r.request_status NOT IN ('confirmation', 'rejected', 'completed')";
+            r.request_status NOT IN ('confirmation', 'rejected', 'completed')
+            AND ri.is_rejected = 'no'";
         
         $result_requests = $conn->query($sql_get_requests);
         
         if ($result_requests) {
             $requested_stocks = $result_requests->fetch_assoc()['total_requested'];
         }
-
         echo '<tr>';
         echo '<td>' . $row['item_name'] . '</td>';
         echo '<td>' . $row['item_brand'] . '</td>';
@@ -35,11 +35,13 @@ function renderItems($conn, $conditions, $sessionCheck = false) {
         echo '<td>' . $requested_stocks . '</td>';
         echo '<td>' . $row['item_price'] . '</td>';
         
-        if ($sessionCheck && $_SESSION['access_level'] == 'inventory manager') {
+        if ($sessionCheck && $_SESSION['access_level'] == 'inventory manager' || $_SESSION['access_level'] == 'finance officer') {
             echo '<td class="actions">';
             echo '<button class="btn1" data-item-id="' . $row['item_id'] . '" onclick="showFloatingContainerViewItem()"><i class="fa-solid fa-eye"></i></button>';
-            echo '<button class="btn2" data-item-id="' . $row['item_id'] . '" onclick="showFloatingContainerEditItem()"><i class="fa-solid fa-pencil"></i></button>';
-            echo '<button class="btn3" data-item-id="' . $row['item_id'] . '"><i class="fa-solid fa-plus"></i></button>';  
+            if ($_SESSION['access_level'] == 'inventory manager') {
+                echo '<button class="btn2" data-item-id="' . $row['item_id'] . '" onclick="showFloatingContainerEditItem()"><i class="fa-solid fa-pencil"></i></button>';
+                echo '<button class="btn3" data-item-id="' . $row['item_id'] . '"><i class="fa-solid fa-plus"></i></button>';  
+            }
             echo '</td>';
         }
         echo '</tr>';
@@ -47,18 +49,18 @@ function renderItems($conn, $conditions, $sessionCheck = false) {
 }
 
 // Render available and non-borrowable items
-renderItems($conn, "item_status = 'available' AND borrowable = 'no' AND hide_status = 'no'", true);
+renderItems($conn, "item_status = 'available' AND borrowable = 'no' ", true);
 
 // Render the "LEND ITEM ONLY" row
 echo '<tr class="lend-item-row"><td class="indication" colspan="7">LEND ITEM ONLY</td></tr>';
 
 // Render available and borrowable items
-renderItems($conn, "item_status = 'available' AND borrowable = 'yes' AND hide_status = 'no'", true);
+renderItems($conn, "item_status = 'available' AND borrowable = 'yes'", true);
 
 // Render hidden items if the user has appropriate access
 if (in_array($_SESSION['access_level'], ['inventory manager', 'finance officer'])) {
     echo '<tr class="hidden-item-row"><td class="indication" colspan="7">HIDDEN ITEMS</td></tr>';
-    renderItems($conn, "hide_status = 'yes'", true);
+    renderItems($conn, "item_status = 'not available'", true);
 }
 
 // Close the database connection

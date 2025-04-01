@@ -24,7 +24,7 @@
         <div><span>Item:</span> <?php echo $item_name ?></div>
         <div><span>Current Stocks:</span> <?php echo $stocks . " " . $unit?></div>
     </div>
-    <input type="number" name="stocks-quantity" id="stocks-quantity" step="1" min="1" required> 
+    <input type="number" name="stocks-quantity" id="stocks-quantity" step="1" min="1" maxlength="255" required> 
     <input type="hidden" name="add-stocks" value="<?php echo $item_id ?>">
     <button type="submit">Add Stocks</button>
 </form>

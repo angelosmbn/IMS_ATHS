@@ -19,7 +19,7 @@
 </div>
 <form class="edit-category-from" action="" method="POST">
     <label for="category">Category: <?php echo $category_name ?></label>
-    <input type="text" name="new-category" id="new-category" value="<?php echo $category_name ?>" required>
+    <input type="text" name="new-category" id="new-category" value="<?php echo $category_name ?>" maxlength="255" required>
     <input type="hidden" name="edit-category" value="<?php echo $category_id ?>">
     <button type="submit">Save Changes</button>
 </form>

@@ -11,7 +11,8 @@
                             WHERE r.request_status = 'confirmation' AND r.requestor_id = '$user_id'";
 
 
-    $result_get_request = $conn->query($sql_get_request);
+    $result_get_request = $conn->query(query: $sql_get_request);
+    $result_num = $result_get_request->num_rows;
     while ($row_get_request = $result_get_request->fetch_assoc()) {
         $requestor_name = $row_get_request['last_name'] . ', ' . $row_get_request['first_name'];
 
@@ -34,25 +35,28 @@
 
     }
 
-    if ($access_level == 'coordinator' || $access_level == 'finance officer' || $access_level == 'inventory manager') {
-        
+
+
+    // for single request
+    if ($access_level == 'coordinator'  || $access_level == 'finance officer' || $access_level == 'inventory manager') {
         if ($access_level == 'coordinator') {
             $handled_department = $_SESSION['handled_department'];
             $sql_get_requests = "SELECT * FROM requests r
                             JOIN users u ON r.requestor_id = u.user_id
                             JOIN departments d ON r.charged_department = d.department_id
-                            WHERE r.request_status = 'coordinator approval' AND charged_department = '$handled_department'";
+                            WHERE r.request_status = 'coordinator approval' AND charged_department = '$handled_department' AND r.request_group_id IS NULL";
+
         } else if ($access_level == 'finance officer') {
             $handled_department = $_SESSION['handled_department'];
             $sql_get_requests = "SELECT * FROM requests r
                             JOIN users u ON r.requestor_id = u.user_id
-                            JOIN departments d ON r.charged_department = d.department_id
-                            WHERE r.request_status = 'finance approval'";
+                            JOIN departments d ON r.charged_department = d.department_id 
+                            WHERE r.request_status = 'finance approval' AND r.request_group_id IS NULL";
         } else if ($access_level == 'inventory manager') {
             $sql_get_requests = "SELECT * FROM requests r
                             JOIN users u ON r.requestor_id = u.user_id
                             JOIN departments d ON r.charged_department = d.department_id
-                            WHERE r.request_status = 'releasing'";
+                            WHERE r.request_status = 'releasing' AND r.request_group_id IS NULL";
         }
 
         $result_get_requests = $conn->query($sql_get_requests);
@@ -74,11 +78,59 @@
             echo '<td>' . $row_get_requests['needed_date'] . '</td>';
             echo '<td>' . $row_get_requests['request_status'] . '</td>';
             echo '<td class="actions">';
-            echo '<button class="btn1" data-user-id="' . $row_get_requests['request_id'] . '" onclick="showFloatingContainerEditRequest(' . $row_get_requests['request_id'] . ')"><i class="fa-solid fa-eye"></i></button>';
+            //echo '<button class="btn1" data-user-id="' . $row_get_requests['request_id'] . '" onclick="showFloatingContainerEditRequest(' . $row_get_requests['request_id'] . ')"><i class="fa-solid fa-eye"></i></button>';
+            echo '<button class="btn1" onclick="showFloatingContainerEditRequest(' . $row_get_requests['request_id'] . ', ' . $row_get_requests['request_group_id'] . ')"><i class="fa-solid fa-eye"></i></button>';
             echo '</td>';
             echo '</tr>';
 
         }
 
     }
+    // for group request
+    if ($access_level == 'coordinator' || $access_level == 'finance officer' || $access_level == 'inventory manager') {
+        
+        if ($access_level == 'coordinator') {
+            $handled_department = $_SESSION['handled_department'];
+            $sql_get_requests = "SELECT * FROM requests r
+                        JOIN users u ON r.requestor_id = u.user_id
+                        JOIN departments d ON r.charged_department = d.department_id
+                        WHERE r.request_status = 'coordinator approval' AND charged_department = '$handled_department' AND r.request_group_id IS NOT NULL
+                        ORDER BY r.request_group_id ASC";
+        } elseif ($access_level == 'finance officer') {
+            $sql_get_requests = "SELECT * FROM requests r
+                        JOIN users u ON r.requestor_id = u.user_id
+                        JOIN departments d ON r.charged_department = d.department_id
+                        WHERE r.request_status = 'finance approval' AND r.request_group_id IS NOT NULL
+                        ORDER BY r.request_group_id ASC"; 
+        } elseif ($access_level == 'inventory manager') {
+            $sql_get_requests = "SELECT * FROM requests r
+                        JOIN users u ON r.requestor_id = u.user_id
+                        JOIN departments d ON r.charged_department = d.department_id
+                        WHERE r.request_status = 'releasing' AND r.request_group_id IS NOT NULL
+                        ORDER BY r.request_group_id ASC";
+        }
+            
+
+        $result_get_requests = $conn->query(query: $sql_get_requests);
+        $prevGroupId = '';
+        while ($row_get_requests = $result_get_requests->fetch_assoc()) {
+            if ($prevGroupId != $row_get_requests['request_group_id']) { 
+                echo '<tr>';
+                echo '<td>' . $row_get_requests['department_name'] . ' Department' . '</td>';
+                echo '<td>' . $row_get_requests['department_name'] . '</td>';
+                echo '<td>' . $row_get_requests['requested_date'] . '</td>';
+                echo '<td>' . $row_get_requests['needed_date'] . '</td>';
+                echo '<td>' . $row_get_requests['request_status'] . '</td>';
+                echo '<td class="actions">';
+                echo '<button class="btn1" onclick="showFloatingContainerEditRequest(' . $row_get_requests['request_id'] . ', ' . $row_get_requests['request_group_id'] . ')"><i class="fa-solid fa-eye"></i></button>';
+                echo '</td>';
+                echo '</tr>';
+            }
+            $prevGroupId = $row_get_requests['request_group_id'];
+
+        }
+
+    }
+
+
 ?>

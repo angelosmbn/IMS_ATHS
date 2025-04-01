@@ -15,7 +15,7 @@
         $item_price = $row['item_price'];
         $item_indicator = $row['restock_indicator'];
         $borrowable = $row['borrowable'];
-        $hide = $row['hide_status'];
+        $item_status = $row['item_status'];
     } else {
         echo "<script>alert('No item selected.')</script>";
         echo "<script>window.location.href = 'inventory.php'</script>";
@@ -51,7 +51,7 @@
                         ?>
                     </select>
                     </td>
-                    <td><input type="text" name="item-name" id="item-name" value="<?php echo htmlspecialchars($item_name); ?>" required></td>
+                    <td><input type="text" name="item-name" id="item-name" value="<?php echo htmlspecialchars($item_name); ?>" maxlength="255" required></td>
                 </tr>
 
                 <tr>
@@ -59,8 +59,8 @@
                     <td><label for="item-description">Item Description</label></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="item-brand" id="item-brand" value="<?php echo htmlspecialchars($item_brand); ?>" required></td>
-                    <td><input type="text" name="item-description" id="item-description" value="<?php echo htmlspecialchars($item_description); ?>" required></td>
+                    <td><input type="text" name="item-brand" id="item-brand" value="<?php echo htmlspecialchars($item_brand); ?>" maxlength="255" required></td>
+                    <td><input type="text" name="item-description" id="item-description" value="<?php echo htmlspecialchars($item_description); ?>" maxlength="255" required></td>
                 </tr>
 
                 <tr>
@@ -91,14 +91,14 @@
                     <td><label for="item-indicator">Restock Indicator</label></td>
                 </tr>
                 <tr>
-                    <td><input type="number" step="0.01" name="item-price" id="item-price" value="<?php echo htmlspecialchars($item_price); ?>" required></td>
-                    <td><input type="text" name="item-indicator" id="item-indicator" value="<?php echo htmlspecialchars($item_indicator); ?>" pattern="[0-9]+" title="Please enter a positive integer"></td>
+                    <td><input type="number" step="0.01" name="item-price" id="item-price" value="<?php echo htmlspecialchars($item_price); ?>" maxlength="11" min="0" required></td>
+                    <td><input type="text" name="item-indicator" id="item-indicator" value="<?php echo htmlspecialchars($item_indicator); ?>" maxlength="11" min="0" pattern="[0-9]+" title="Please enter a positive integer"></td>
 
                 </tr>
                 
                 <tr>
                     <td><label for="borrowable">Borrowable</label></td>
-                    <td><label for="hide">Hide</label></td>
+                    <td><label for="status">Status</label></td>
                 </tr>
                 <tr>
                     <td>
@@ -109,9 +109,9 @@
                         <input type="hidden" name="edit-item" value="<?php echo $item_id ?>">
                     </td>
                     <td>
-                        <select name="hide" id="hide">
-                            <option value="yes"  <?php if ($hide == 'yes') echo 'selected'; ?>>Yes</option>
-                            <option value="no" <?php if ($hide == 'no') echo 'selected'; ?>>No</option>
+                        <select name="status" id="status">
+                            <option value="available"  <?php if ($item_status == 'available') echo 'selected'; ?>>Available</option>
+                            <option value="not available" <?php if ($item_status == 'not available') echo 'selected'; ?>>Not Available</option>
                         </select>
                     </td>
                 </tr>

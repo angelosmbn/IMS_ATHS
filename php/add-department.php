@@ -94,7 +94,6 @@
     <link rel="stylesheet" href="../css/add-category.css">
     <link rel="stylesheet" href="../fontawesome-free-6.5.1-web/css/all.min.css">
     
-    <title>Document</title>
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js" 
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
@@ -109,8 +108,8 @@
         </div>
         <form class="add-category-from" action="" method="POST">
             <label for="department">Department</label>
-            <input type="text" name="department" id="department" required>
-            <button type="submit" name="add-department">Add Department</button>
+            <input type="text" name="department" id="department" maxlength="255" required>
+            <button type="submit" name="add-department" id="add-department-button">Add Department</button>
             <?php 
                 echo "<span id='response'></span>"
             ?>
@@ -124,7 +123,7 @@
                 </tr>
                 <tr>
                     <?php 
-                        $sql_get_categories = "SELECT * FROM departments WHERE department_id != 0";
+                        $sql_get_categories = "SELECT * FROM departments WHERE department_id != 0 AND department_id != 1";
                         $result = $conn->query($sql_get_categories);
                         while($row = $result->fetch_assoc()) {
                             echo "<tr>";
@@ -156,7 +155,13 @@
     
     function hideFloatingContainerAddCategory() {
         document.getElementById('floating-addCategory-container').style.display = 'none';
+        
+        const currentUrl = new URL(window.location.href);
+        const newUrl = currentUrl.pathname; // Gets the pathname without query parameters or hash
+        
+        window.history.pushState({}, '', newUrl);
     }
+
     function hideFloatingContainerEditCategory() {
         document.getElementById('floating-editCategory-container').style.display = 'none';
     }
