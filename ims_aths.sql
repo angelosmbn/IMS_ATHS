@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2025 at 05:36 PM
+-- Generation Time: Apr 01, 2025 at 05:52 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,8 +18,50 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ims_aths`
+-- Database: `athwebs_database_ims`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accumulable`
+--
+
+CREATE TABLE `accumulable` (
+  `id` int(11) NOT NULL,
+  `department_id_fk` int(11) NOT NULL,
+  `item_id_fk` int(11) NOT NULL,
+  `accumulable_quantity` int(11) NOT NULL,
+  `consumed` int(11) NOT NULL,
+  `school_year` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `accumulable`
+--
+
+INSERT INTO `accumulable` (`id`, `department_id_fk`, `item_id_fk`, `accumulable_quantity`, `consumed`, `school_year`) VALUES
+(84, 0, 22, 0, 0, '2023-2024'),
+(85, 1, 22, 0, 0, '2023-2024'),
+(86, 2, 22, 0, 0, '2023-2024'),
+(87, 3, 22, 0, 0, '2023-2024'),
+(88, 4, 22, 0, 27, '2023-2024'),
+(89, 5, 22, 0, 0, '2023-2024'),
+(90, 9, 22, 0, 0, '2023-2024'),
+(91, 0, 23, 0, 0, '2023-2024'),
+(92, 1, 23, 0, 44, '2023-2024'),
+(93, 2, 23, 0, 0, '2023-2024'),
+(94, 3, 23, 0, 0, '2023-2024'),
+(95, 4, 23, 0, 13, '2023-2024'),
+(96, 5, 23, 0, 0, '2023-2024'),
+(97, 9, 23, 0, 0, '2023-2024'),
+(98, 0, 24, 0, 0, '2023-2024'),
+(99, 1, 24, 0, 0, '2023-2024'),
+(100, 2, 24, 0, 0, '2023-2024'),
+(101, 3, 24, 0, 0, '2023-2024'),
+(102, 4, 24, 0, 7, '2023-2024'),
+(103, 5, 24, 0, 0, '2023-2024'),
+(104, 9, 24, 0, 0, '2023-2024');
 
 -- --------------------------------------------------------
 
@@ -37,12 +79,13 @@ CREATE TABLE `departments` (
 --
 
 INSERT INTO `departments` (`department_id`, `department_name`) VALUES
-(1, 'MAPEH'),
-(2, 'Mathematics'),
-(3, 'Science'),
-(4, 'Finance'),
-(5, 'Admin'),
-(8, 'Example Department');
+(0, 'General'),
+(1, 'Math'),
+(2, 'Advisers'),
+(3, 'Admin'),
+(4, 'Non-Teaching'),
+(5, 'Test'),
+(9, 'test2');
 
 -- --------------------------------------------------------
 
@@ -56,30 +99,25 @@ CREATE TABLE `items` (
   `item_name` varchar(255) NOT NULL,
   `item_brand` varchar(255) NOT NULL,
   `item_description` varchar(255) NOT NULL,
+  `beginning_inventory` int(11) NOT NULL,
   `item_stocks` int(11) NOT NULL,
+  `unit` varchar(255) NOT NULL,
   `item_price` double(10,2) NOT NULL,
-  `restock_quantity` int(11) DEFAULT 0,
-  `item_status` enum('Available','Not Available') NOT NULL DEFAULT 'Available'
+  `restock_indicator` int(11) NOT NULL,
+  `borrowable` enum('yes','no') NOT NULL,
+  `item_status` enum('available','not available') NOT NULL DEFAULT 'available',
+  `date_added` datetime NOT NULL,
+  `hide_status` enum('yes','no') NOT NULL DEFAULT 'no'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`item_id`, `item_category`, `item_name`, `item_brand`, `item_description`, `item_stocks`, `item_price`, `restock_quantity`, `item_status`) VALUES
-(42, 'Ballpen', 'Ballpen', 'Pilot', 'Black', 9, 15.00, 10, 'Available'),
-(43, 'Bond Paper', 'Bond Paper', 'Hard Copy', 'Short', 198, 1.50, 50, 'Available'),
-(44, 'Calculator', 'Calculator', 'Casio', 'Scientific Calculator', 8, 1099.00, 0, 'Available'),
-(45, 'Crayons', 'Crayons', 'Crayola', '16 Crayon', 72, 30.00, 0, 'Available'),
-(46, 'Glue', 'Glue', 'Elmer\\\'s', 'White', 12, 18.00, 0, 'Available'),
-(47, 'Keyboard', 'Keyboard', 'A4tech', 'Membrane', 35, 150.00, 0, 'Available'),
-(48, 'Monitor', 'Monitor', 'Asus', '24inch 240hz', 36, 25000.00, 0, 'Available'),
-(49, 'Mouse', 'Mouse', 'Logitech', '1000 Polling Rate', 37, 1800.00, 0, 'Available'),
-(50, 'Pencil', 'Pencil', 'Mongol', '1', 50, 10.00, 10, 'Available'),
-(51, 'Ruler', 'Ruler', 'Joy', '12 inch, Transparent', 12, 10.00, 0, 'Available'),
-(52, 'Scissors', 'Scissors', 'Joy', 'Large', 15, 25.00, 0, 'Available'),
-(53, 'Bond Paper', 'Bond Paper', 'Hard Copy', 'Legal', 147, 1.75, 50, 'Available'),
-(54, 'Scissors', 'asdf', 'asdf', 'asdf', 20, 1.00, 11, 'Available');
+INSERT INTO `items` (`item_id`, `item_category`, `item_name`, `item_brand`, `item_description`, `beginning_inventory`, `item_stocks`, `unit`, `item_price`, `restock_indicator`, `borrowable`, `item_status`, `date_added`, `hide_status`) VALUES
+(22, 'Paper', 'Bondpaper', 'Pandayan', 'Letter', 100, 73, 'PCS', 1.00, 50, 'no', 'available', '2025-03-06 01:17:09', 'no'),
+(23, 'Pen', 'Ballpen', 'Panda', 'Black', 50, 37, 'PCS', 10.00, 40, 'no', 'available', '2025-03-06 01:17:44', 'no'),
+(24, 'Tools', 'Puncher', 'Brand', 'Large', 5, 3, 'PCS', 5.00, 0, 'yes', 'available', '2025-03-06 01:18:12', 'no');
 
 -- --------------------------------------------------------
 
@@ -97,30 +135,67 @@ CREATE TABLE `items_category` (
 --
 
 INSERT INTO `items_category` (`category_id`, `category_name`) VALUES
-(32, 'Bond Paper'),
-(33, 'Ballpen'),
-(34, 'Pencil'),
-(35, 'Glue'),
-(36, 'Crayons'),
-(37, 'Scissors'),
-(38, 'Ruler'),
-(39, 'Calculator'),
-(40, 'Monitor'),
-(41, 'Mouse'),
-(42, 'Keyboard'),
-(43, 'test');
+(6, 'Paper'),
+(7, 'Pen'),
+(8, 'Tools');
+
+-- --------------------------------------------------------
 
 --
--- Triggers `items_category`
+-- Table structure for table `items_unit`
 --
-DELIMITER $$
-CREATE TRIGGER `update_item_category` AFTER UPDATE ON `items_category` FOR EACH ROW BEGIN
-    UPDATE items
-    SET item_category = NEW.category_name
-    WHERE item_category = OLD.category_name;
-END
-$$
-DELIMITER ;
+
+CREATE TABLE `items_unit` (
+  `unit_id` int(11) NOT NULL,
+  `unit_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `items_unit`
+--
+
+INSERT INTO `items_unit` (`unit_id`, `unit_name`) VALUES
+(3, 'PCS'),
+(4, 'BOX'),
+(5, 'REAM');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `requested_items`
+--
+
+CREATE TABLE `requested_items` (
+  `requested_items_id` int(11) NOT NULL,
+  `item_id_fk` int(11) NOT NULL,
+  `request_id_fk` int(11) NOT NULL,
+  `request_quantity` int(11) NOT NULL,
+  `requesting_department_id` int(11) NOT NULL,
+  `return_status` enum('no','marked','returned','na') NOT NULL DEFAULT 'na',
+  `returned_date` datetime DEFAULT NULL,
+  `static_item_price` double(10,2) NOT NULL,
+  `is_rejected` varchar(255) NOT NULL DEFAULT 'no',
+  `stock_monitoring_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `requested_items`
+--
+
+INSERT INTO `requested_items` (`requested_items_id`, `item_id_fk`, `request_id_fk`, `request_quantity`, `requesting_department_id`, `return_status`, `returned_date`, `static_item_price`, `is_rejected`, `stock_monitoring_id`) VALUES
+(245, 22, 144, 25, 4, 'na', NULL, 0.00, 'no', 197),
+(246, 23, 144, 11, 4, 'na', NULL, 0.00, 'no', 198),
+(247, 24, 144, 5, 4, 'returned', '2025-03-06 01:26:00', 0.00, 'no', 199),
+(248, 22, 145, 1, 1, 'na', NULL, 0.00, 'no', 0),
+(249, 23, 146, 1, 0, 'na', NULL, 0.00, 'yes', 0),
+(253, 23, 149, 39, 1, 'na', NULL, 0.00, 'no', 201),
+(254, 23, 150, 5, 1, 'na', NULL, 0.00, 'no', 0),
+(255, 22, 151, 1, 4, 'na', NULL, 0.00, 'no', 204),
+(256, 23, 151, 1, 4, 'na', NULL, 0.00, 'no', 205),
+(257, 24, 151, 1, 4, 'no', NULL, 0.00, 'no', 206),
+(258, 24, 152, 1, 4, 'no', NULL, 0.00, 'no', 207),
+(259, 22, 153, 1, 4, 'na', NULL, 0.00, 'no', 208),
+(260, 23, 153, 1, 4, 'na', NULL, 0.00, 'no', 209);
 
 -- --------------------------------------------------------
 
@@ -130,34 +205,57 @@ DELIMITER ;
 
 CREATE TABLE `requests` (
   `request_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `user_name` varchar(255) NOT NULL,
-  `request_date` date NOT NULL,
-  `needed_date` date NOT NULL,
-  `received_date` date DEFAULT NULL,
-  `requested_items` varchar(255) NOT NULL,
-  `items_quantity` varchar(255) NOT NULL,
-  `department_name` varchar(255) NOT NULL,
-  `coordinator_signature` varchar(255) DEFAULT NULL,
-  `finance_signature` varchar(255) DEFAULT NULL,
-  `requestor_signature` varchar(255) DEFAULT NULL,
-  `received_signature` varchar(255) DEFAULT NULL,
+  `requestor_id` int(11) NOT NULL,
+  `coordinator_id` int(11) DEFAULT NULL,
+  `finance_id` int(11) NOT NULL,
+  `charged_department` int(11) NOT NULL,
+  `request_description` varchar(255) NOT NULL,
+  `coordinator_comment` varchar(255) NOT NULL,
+  `finance_comment` varchar(255) NOT NULL,
   `school_year` varchar(255) NOT NULL,
-  `request_status` enum('Coordinator Approval','Finance Approval','Releasing','Confirmation','Completed','Rejected') NOT NULL DEFAULT 'Coordinator Approval',
-  `description` varchar(255) NOT NULL,
-  `coordinator_name` varchar(255) NOT NULL,
-  `finance_name` varchar(255) NOT NULL,
-  `comment` varchar(255) NOT NULL,
-  `request_timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `requested_date` datetime NOT NULL,
+  `needed_date` date NOT NULL,
+  `released_date` datetime DEFAULT NULL,
+  `received_date` datetime NOT NULL,
+  `request_status` enum('coordinator approval','finance approval','releasing','confirmation','completed','rejected') NOT NULL,
+  `coordinator_approval` varchar(255) DEFAULT NULL,
+  `finance_approval` varchar(255) DEFAULT NULL,
+  `requestor_approval` varchar(255) DEFAULT NULL,
+  `request_group_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `requests`
 --
 
-INSERT INTO `requests` (`request_id`, `user_id`, `user_name`, `request_date`, `needed_date`, `received_date`, `requested_items`, `items_quantity`, `department_name`, `coordinator_signature`, `finance_signature`, `requestor_signature`, `received_signature`, `school_year`, `request_status`, `description`, `coordinator_name`, `finance_name`, `comment`, `request_timestamp`) VALUES
-(160, 21, 'Angelo M. Simbulan', '2024-04-04', '2024-04-07', '2024-04-04', '43,53', '50,50', 'Mathematics', '1712217089_sig 2.png', '1712217128_sig 3.png', '1712217031_sig 1.png', '1712217198_sig 1.png', '2023-2024', 'Completed', 'Test', 'Cinderella C. Math', 'Tremaine O. Finance', '', '2024-04-04 07:53:18'),
-(161, 17, 'Paul F. Walker', '2024-04-04', '2024-04-07', '2024-04-04', '42,43,53,44,45,46,47,48,49', '1,2,3,1,2,1,5,4,3', 'Mathematics', NULL, '1712245604_signature with background.jpg', '1712245568_signature with background.jpg', '1712245635_signature with background.jpg', '2023-2024', 'Completed', '', '', 'Tremaine O. Finance', '', '2024-04-04 15:47:15');
+INSERT INTO `requests` (`request_id`, `requestor_id`, `coordinator_id`, `finance_id`, `charged_department`, `request_description`, `coordinator_comment`, `finance_comment`, `school_year`, `requested_date`, `needed_date`, `released_date`, `received_date`, `request_status`, `coordinator_approval`, `finance_approval`, `requestor_approval`, `request_group_id`) VALUES
+(144, 9, 8, 8, 4, '8', '', 'asdfasdf', '2023-2024', '2025-03-06 01:18:52', '2025-03-08', '2025-03-06 01:24:39', '2025-03-06 01:26:22', 'completed', NULL, 'APPROVED', 'APPROVED', NULL),
+(145, 8, 7, 8, 1, 'f', 'asdf', 'asdf', '2023-2024', '2025-03-06 01:31:33', '2025-03-10', '2025-03-06 23:21:42', '0000-00-00 00:00:00', 'confirmation', 'APPROVED', 'APPROVED', NULL, 1),
+(146, 1, 7, 8, 1, '2', '', '', '2023-2024', '2025-03-06 01:35:36', '2025-03-15', NULL, '0000-00-00 00:00:00', 'rejected', NULL, NULL, NULL, 1),
+(149, 9, 7, 8, 1, 'asdf', 'asdf', 'asdf', '2023-2024', '2025-03-07 00:08:14', '2025-03-09', '2025-03-07 00:48:24', '0000-00-00 00:00:00', 'releasing', 'APPROVED', 'APPROVED', NULL, 2),
+(150, 7, 7, 8, 1, 'asdf', 'asdf', 'asdf', '2023-2024', '2025-03-07 00:09:02', '2025-03-09', '2025-03-07 00:48:24', '0000-00-00 00:00:00', 'releasing', 'APPROVED', 'APPROVED', NULL, 2),
+(151, 8, 8, 8, 4, '', '', 'asdf', '2023-2024', '2025-03-09 20:20:10', '2025-03-12', '2025-03-09 20:25:53', '0000-00-00 00:00:00', 'confirmation', NULL, 'APPROVED', NULL, NULL),
+(152, 9, 8, 8, 4, 'asdf', '', 'asdf', '2023-2024', '2025-03-09 20:26:33', '2025-03-12', '2025-03-09 20:27:18', '0000-00-00 00:00:00', 'confirmation', NULL, 'APPROVED', NULL, 3),
+(153, 8, 8, 8, 4, 'asdf', '', 'asdf', '2023-2024', '2025-03-09 20:26:44', '2025-03-13', '2025-03-09 20:27:18', '0000-00-00 00:00:00', 'confirmation', NULL, 'APPROVED', NULL, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `school_year`
+--
+
+CREATE TABLE `school_year` (
+  `school_year_id` int(11) NOT NULL,
+  `school_year` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `school_year`
+--
+
+INSERT INTO `school_year` (`school_year_id`, `school_year`) VALUES
+(1, '2023-2024'),
+(2, '2022-2023');
 
 -- --------------------------------------------------------
 
@@ -167,38 +265,41 @@ INSERT INTO `requests` (`request_id`, `user_id`, `user_name`, `request_date`, `n
 
 CREATE TABLE `stock_monitoring` (
   `monitoring_id` int(11) NOT NULL,
-  `item_id` int(11) NOT NULL,
   `request_id` int(11) NOT NULL,
-  `beginning_inventory` int(11) NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `requesting_department_id` int(11) NOT NULL,
+  `beginning_inventory_general` int(11) NOT NULL,
   `item_purchases` int(11) NOT NULL,
   `item_cost` double(10,2) NOT NULL,
-  `request_quantity` int(11) NOT NULL,
-  `request_date` date NOT NULL,
-  `release_date` date NOT NULL,
-  `ending_inventory` int(11) NOT NULL,
-  `requesting_department` varchar(255) NOT NULL,
-  `school_year` varchar(255) NOT NULL
+  `requested_quantity_general` int(11) NOT NULL,
+  `requested_date` datetime DEFAULT NULL,
+  `release_date` datetime DEFAULT NULL,
+  `ending_inventory_general` int(11) NOT NULL,
+  `school_year` varchar(255) NOT NULL,
+  `timestamp_added` timestamp NOT NULL DEFAULT current_timestamp(),
+  `charged_department_id` int(11) NOT NULL,
+  `purpose` varchar(255) NOT NULL,
+  `is_shown` varchar(255) NOT NULL DEFAULT 'yes',
+  `is_borrowable` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `stock_monitoring`
 --
 
-INSERT INTO `stock_monitoring` (`monitoring_id`, `item_id`, `request_id`, `beginning_inventory`, `item_purchases`, `item_cost`, `request_quantity`, `request_date`, `release_date`, `ending_inventory`, `requesting_department`, `school_year`) VALUES
-(74, 43, 160, 150, 0, 1.50, 50, '2024-04-04', '2024-04-04', 100, 'Mathematics', '2023-2024'),
-(75, 53, 160, 200, 0, 1.75, 50, '2024-04-04', '2024-04-04', 150, 'Mathematics', '2023-2024'),
-(76, 54, 0, 10, 10, 0.00, 0, '2024-04-04', '0000-00-00', 20, 'Added Stocks', ''),
-(77, 43, 0, 100, 100, 0.00, 0, '2024-04-04', '0000-00-00', 200, 'Added Stocks', ''),
-(78, 42, 0, 0, 10, 0.00, 0, '2024-04-04', '0000-00-00', 10, 'Added Stocks', ''),
-(79, 42, 161, 10, 0, 15.00, 1, '2024-04-04', '2024-04-04', 9, 'Mathematics', '2023-2024'),
-(80, 43, 161, 200, 0, 1.50, 2, '2024-04-04', '2024-04-04', 198, 'Mathematics', '2023-2024'),
-(81, 53, 161, 150, 0, 1.75, 3, '2024-04-04', '2024-04-04', 147, 'Mathematics', '2023-2024'),
-(82, 44, 161, 9, 0, 1099.00, 1, '2024-04-04', '2024-04-04', 8, 'Mathematics', '2023-2024'),
-(83, 45, 161, 74, 0, 30.00, 2, '2024-04-04', '2024-04-04', 72, 'Mathematics', '2023-2024'),
-(84, 46, 161, 13, 0, 18.00, 1, '2024-04-04', '2024-04-04', 12, 'Mathematics', '2023-2024'),
-(85, 47, 161, 40, 0, 150.00, 5, '2024-04-04', '2024-04-04', 35, 'Mathematics', '2023-2024'),
-(86, 48, 161, 40, 0, 25000.00, 4, '2024-04-04', '2024-04-04', 36, 'Mathematics', '2023-2024'),
-(87, 49, 161, 40, 0, 1800.00, 3, '2024-04-04', '2024-04-04', 37, 'Mathematics', '2023-2024');
+INSERT INTO `stock_monitoring` (`monitoring_id`, `request_id`, `item_id`, `requesting_department_id`, `beginning_inventory_general`, `item_purchases`, `item_cost`, `requested_quantity_general`, `requested_date`, `release_date`, `ending_inventory_general`, `school_year`, `timestamp_added`, `charged_department_id`, `purpose`, `is_shown`, `is_borrowable`) VALUES
+(197, 144, 22, 4, 100, 0, 1.00, 25, '2025-03-06 01:18:52', '2025-03-06 01:24:39', 75, '2023-2024', '2025-03-05 17:24:39', 4, '', 'yes', 'no'),
+(198, 144, 23, 4, 50, 0, 10.00, 11, '2025-03-06 01:18:52', '2025-03-06 01:24:39', 39, '2023-2024', '2025-03-05 17:24:39', 4, '', 'yes', 'no'),
+(199, 144, 24, 4, 5, 0, 5.00, 5, '2025-03-06 01:18:52', '2025-03-06 01:24:39', 0, '2023-2024', '2025-03-05 17:24:39', 4, '', 'no', 'yes'),
+(200, 144, 24, 4, 0, 0, 5.00, 5, '2025-03-06 01:18:52', '2025-03-06 01:26:00', 5, '2023-2024', '2025-03-05 17:26:00', 4, 'Returned', 'yes', 'yes'),
+(201, 149, 23, 1, 39, 0, 10.00, 39, '2025-03-07 00:08:14', '2025-03-07 00:48:24', 0, '2023-2024', '2025-03-06 16:48:24', 1, '', 'yes', 'no'),
+(202, 0, 23, 0, 0, 39, 0.00, 0, '2025-03-07 01:01:55', '2025-03-07 01:01:55', 39, '2023-2024', '2025-03-06 17:01:55', 0, 'Add Stocks', 'yes', ''),
+(204, 151, 22, 4, 75, 0, 1.00, 1, '2025-03-09 20:20:10', '2025-03-09 20:25:53', 74, '2023-2024', '2025-03-09 12:25:53', 4, '', 'yes', 'no'),
+(205, 151, 23, 4, 39, 0, 10.00, 1, '2025-03-09 20:20:10', '2025-03-09 20:25:53', 38, '2023-2024', '2025-03-09 12:25:53', 4, '', 'yes', 'no'),
+(206, 151, 24, 4, 5, 0, 5.00, 1, '2025-03-09 20:20:10', '2025-03-09 20:25:53', 4, '2023-2024', '2025-03-09 12:25:53', 4, '', 'yes', 'yes'),
+(207, 152, 24, 4, 4, 0, 5.00, 1, '2025-03-09 20:26:33', '2025-03-09 20:27:18', 3, '2023-2024', '2025-03-09 12:27:18', 4, '', 'yes', 'yes'),
+(208, 153, 22, 4, 74, 0, 1.00, 1, '2025-03-09 20:26:44', '2025-03-09 20:27:18', 73, '2023-2024', '2025-03-09 12:27:18', 4, '', 'yes', 'no'),
+(209, 153, 23, 4, 38, 0, 10.00, 1, '2025-03-09 20:26:44', '2025-03-09 20:27:18', 37, '2023-2024', '2025-03-09 12:27:18', 4, '', 'yes', 'no');
 
 -- --------------------------------------------------------
 
@@ -209,36 +310,44 @@ INSERT INTO `stock_monitoring` (`monitoring_id`, `item_id`, `request_id`, `begin
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
   `middle_name` varchar(255) NOT NULL,
-  `gender` enum('Male','Female') NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `contact` varchar(11) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `access_level` enum('user','admin','coordinator','finance officer','inventory manager') NOT NULL,
-  `handled_department` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `access_level` enum('employee','admin','coordinator','finance officer','inventory manager') NOT NULL,
   `department` varchar(255) NOT NULL,
-  `account_status` enum('active','disabled','pending') NOT NULL DEFAULT 'pending',
-  `created_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `handled_department` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `contact` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `account_status` enum('pending','active','disabled') NOT NULL,
+  `creation_date` datetime NOT NULL,
+  `otp` varchar(10) NOT NULL,
+  `otp_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `middle_name`, `gender`, `username`, `contact`, `password`, `access_level`, `handled_department`, `department`, `account_status`, `created_on`) VALUES
-(8, 'George', 'Admin', '', 'Female', 'admin@gmail.com', '09123456789', '912ec803b2ce49e4a541068d495ab570', 'admin', '', 'Admin', 'active', '2024-04-03 07:24:19'),
-(17, 'Paul', 'Walker', 'Fast', 'Male', 'inventorymanager@gmail.com', '09123456789', '912ec803b2ce49e4a541068d495ab570', 'inventory manager', '', 'Finance', 'active', '2024-04-03 07:36:31'),
-(18, 'Cinderella', 'Math', 'Coordinator', 'Female', 'mathcoordinator@gmail.com', '09123456789', '912ec803b2ce49e4a541068d495ab570', 'coordinator', 'Mathematics', 'Mathematics', 'active', '2024-04-03 07:36:15'),
-(19, 'Tremaine', 'Finance', 'Officer', 'Female', 'financeofficer@gmail.com', '09123456789', '912ec803b2ce49e4a541068d495ab570', 'finance officer', '', 'Finance', 'active', '2024-04-03 07:32:50'),
-(20, 'asdf', 'asdf', 'asdf', 'Male', 'asdf@gmail.com', 'asdf', '912ec803b2ce49e4a541068d495ab570', 'coordinator', 'MAPEH', 'MAPEH', 'active', '2024-04-03 14:19:18'),
-(21, 'Angelo', 'Simbulan', 'Meneses', 'Male', '202110310@fit.edu.ph', '09271340561', '912ec803b2ce49e4a541068d495ab570', 'user', '', 'Mathematics', 'active', '2024-04-04 07:49:35'),
-(22, 'Ian Angelo', 'Simbulan', 'Meneses', 'Male', 'angelosimbulan16@gmail.com', '09271340561', '912ec803b2ce49e4a541068d495ab570', 'coordinator', 'Admin', 'Admin', 'active', '2024-04-04 16:32:40'),
-(23, 'asdf', 'asdf', 'asdf', 'Male', 'smbnangelo16@gmail.com', 'asdf', '912ec803b2ce49e4a541068d495ab570', 'user', '', '', 'pending', '2024-04-04 16:18:10');
+INSERT INTO `users` (`user_id`, `first_name`, `middle_name`, `last_name`, `access_level`, `department`, `handled_department`, `username`, `email`, `contact`, `password`, `account_status`, `creation_date`, `otp`, `otp_expiry`) VALUES
+(1, 'Ian Angelo', 'Meneses', 'Simbulan', 'employee', '1, 4', 0, 'asdf', 'salinas.nathalie1902@gmail.com', '', '912ec803b2ce49e4a541068d495ab570', 'active', '2024-04-14 17:33:20', '487883', '2024-09-02 12:39:35'),
+(6, 'admin', 'admin', 'admin', 'admin', '3', 0, 'admin', 'admin@gmail.com', '09271340561', '912ec803b2ce49e4a541068d495ab570', 'active', '2024-04-24 01:10:22', '', NULL),
+(7, 'math', 'math', 'coordinator', 'coordinator', '1, 2', 1, 'math', 'math@gmail.com', '09166672259', '912ec803b2ce49e4a541068d495ab570', 'active', '2024-04-26 15:27:46', '034360', '2024-09-02 13:13:49'),
+(8, 'finance', 'finance', 'Officer', 'finance officer', '4, 1', 4, 'finance', 'smbnangelo16@gmail.com', '12345678910', '912ec803b2ce49e4a541068d495ab570', 'active', '2024-04-26 15:28:16', '', NULL),
+(9, 'inventory', '', 'manager', 'inventory manager', '4, 3, 1', 0, 'inventory', '', '09166672259', '912ec803b2ce49e4a541068d495ab570', 'active', '2024-04-26 15:29:12', '', NULL),
+(10, 'science', '', 'coordinator', 'coordinator', '2', 2, 'science', 'science@gmail.com', '09166672259', '912ec803b2ce49e4a541068d495ab570', 'active', '2024-04-26 16:14:28', '', NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `accumulable`
+--
+ALTER TABLE `accumulable`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `department_id_fk` (`department_id_fk`),
+  ADD KEY `item_id_fk` (`item_id_fk`);
 
 --
 -- Indexes for table `departments`
@@ -259,17 +368,43 @@ ALTER TABLE `items_category`
   ADD PRIMARY KEY (`category_id`);
 
 --
+-- Indexes for table `items_unit`
+--
+ALTER TABLE `items_unit`
+  ADD PRIMARY KEY (`unit_id`);
+
+--
+-- Indexes for table `requested_items`
+--
+ALTER TABLE `requested_items`
+  ADD PRIMARY KEY (`requested_items_id`),
+  ADD KEY `requested_items_ibfk_1` (`request_id_fk`),
+  ADD KEY `requested_items_ibfk_2` (`item_id_fk`),
+  ADD KEY `requesting_department_id` (`requesting_department_id`);
+
+--
 -- Indexes for table `requests`
 --
 ALTER TABLE `requests`
   ADD PRIMARY KEY (`request_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `requests_ibfk_1` (`requestor_id`),
+  ADD KEY `charged_department` (`charged_department`);
+
+--
+-- Indexes for table `school_year`
+--
+ALTER TABLE `school_year`
+  ADD PRIMARY KEY (`school_year_id`);
 
 --
 -- Indexes for table `stock_monitoring`
 --
 ALTER TABLE `stock_monitoring`
-  ADD PRIMARY KEY (`monitoring_id`);
+  ADD PRIMARY KEY (`monitoring_id`),
+  ADD KEY `stock_monitoring_ibfk_1` (`requesting_department_id`),
+  ADD KEY `stock_monitoring_ibfk_2` (`item_id`),
+  ADD KEY `stock_monitoring_ibfk_3` (`request_id`),
+  ADD KEY `charged_department_id` (`charged_department_id`);
 
 --
 -- Indexes for table `users`
@@ -282,50 +417,97 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `accumulable`
+--
+ALTER TABLE `accumulable`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+
+--
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `items_category`
 --
 ALTER TABLE `items_category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `items_unit`
+--
+ALTER TABLE `items_unit`
+  MODIFY `unit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `requested_items`
+--
+ALTER TABLE `requested_items`
+  MODIFY `requested_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=261;
 
 --
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
+
+--
+-- AUTO_INCREMENT for table `school_year`
+--
+ALTER TABLE `school_year`
+  MODIFY `school_year_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `stock_monitoring`
 --
 ALTER TABLE `stock_monitoring`
-  MODIFY `monitoring_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `monitoring_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `accumulable`
+--
+ALTER TABLE `accumulable`
+  ADD CONSTRAINT `accumulable_ibfk_1` FOREIGN KEY (`department_id_fk`) REFERENCES `departments` (`department_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `accumulable_ibfk_2` FOREIGN KEY (`item_id_fk`) REFERENCES `items` (`item_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `requested_items`
+--
+ALTER TABLE `requested_items`
+  ADD CONSTRAINT `requested_items_ibfk_1` FOREIGN KEY (`request_id_fk`) REFERENCES `requests` (`request_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `requested_items_ibfk_2` FOREIGN KEY (`item_id_fk`) REFERENCES `items` (`item_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `requested_items_ibfk_3` FOREIGN KEY (`requesting_department_id`) REFERENCES `departments` (`department_id`) ON UPDATE NO ACTION;
+
+--
 -- Constraints for table `requests`
 --
 ALTER TABLE `requests`
-  ADD CONSTRAINT `requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `requests_ibfk_1` FOREIGN KEY (`requestor_id`) REFERENCES `users` (`user_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `requests_ibfk_2` FOREIGN KEY (`charged_department`) REFERENCES `departments` (`department_id`) ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `stock_monitoring`
+--
+ALTER TABLE `stock_monitoring`
+  ADD CONSTRAINT `stock_monitoring_ibfk_1` FOREIGN KEY (`requesting_department_id`) REFERENCES `departments` (`department_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `stock_monitoring_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`item_id`) ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
